@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: ac.uk.soton.ecs.sw.semblog.tstore.RdfStoreTest
--------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.699 sec
