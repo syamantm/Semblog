@@ -9,6 +9,11 @@ what resource it is talking about, what other webpages are referenced etc. This 
 attempt to harvest these additional metada and expose them as RESTfull resources. One can then use 
 Semblog Browser plugin extension to see the related blog posts in the original webpage itself.
 
+---This is a Maven Project---
+In your preferred IDE such as Eclipse:
+- Import semblog as a Maven Project
+------------------------------------
+
 Modules
 -----------------
 semblog.tstore - harvests rdf data from semantic blogs and stores them to a RDF store using Jena RDF API.
@@ -49,13 +54,9 @@ From the command line with Maven:
 $ cd semblogsvc
 $ mvn tomcat:run
 
-or
-
-In your preferred IDE such as Eclipse:
-- Import semblogsvc as a Maven Project
 
 Access the deployed web application at: http://localhost:8080/semblogsvc/
 
 Other info:
 -------------------
-The initial code is a fork from git://github.com/SpringSource/spring-mvc-showcase.git
+The initial code for semblogsvc module is a fork from git://github.com/SpringSource/spring-mvc-showcase.git
