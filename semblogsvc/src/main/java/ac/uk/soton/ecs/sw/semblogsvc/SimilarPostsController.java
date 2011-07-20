@@ -1,29 +1,34 @@
 package ac.uk.soton.ecs.sw.semblogsvc;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
+import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexSearcher;
 import ac.uk.soton.ecs.sw.semblogsvc.data.PostInfoBean;
-import ac.uk.soton.ecs.sw.semblogsvc.service.FindRelatedPostsSvc;
-import ac.uk.soton.ecs.sw.semblogsvc.service.IRelatedPostsService;
+import ac.uk.soton.ecs.sw.semblogsvc.service.ISimilarPostsService;
 
 @Controller
-@RequestMapping("/relatedPosts/*")
-public class RelatedPostsController {
+@RequestMapping("/similarPosts/*")
+public class SimilarPostsController {
 
 	@Autowired
-	private IRelatedPostsService relatedPostsSvc;
+	private ISimilarPostsService similarPostsSvc;
 
 	@RequestMapping(value = "param", method = RequestMethod.POST)
 	public @ResponseBody
 	String retrieveRelatedPosts(@RequestBody String searchUri) {
 
-		PostInfoBean[] results = relatedPostsSvc.getRelatedPosts(searchUri);
+		PostInfoBean[] results = similarPostsSvc.getSimilarPosts(searchUri);
 		StringBuilder builder = new StringBuilder();
 		if (results.length > 0) {
 			for (PostInfoBean res : results) {
@@ -43,9 +48,9 @@ public class RelatedPostsController {
 	@RequestMapping(value = "rest", method = RequestMethod.POST)
 	public @ResponseBody
 	PostInfoBean[] getRelatedPosts(@RequestBody String searchUri) {
-
-		PostInfoBean[] results = relatedPostsSvc.getRelatedPosts(searchUri);
-
+		System.out.println("SimilarPostsController : similarPosts/rest");
+		PostInfoBean[] results = similarPostsSvc.getSimilarPosts(searchUri);
+		System.out.println("Result length : " + results.length);
 		return results;
 	}
 

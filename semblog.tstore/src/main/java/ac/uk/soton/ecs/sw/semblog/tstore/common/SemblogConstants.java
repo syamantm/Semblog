@@ -5,8 +5,11 @@ import org.apache.lucene.util.Version;
 public class SemblogConstants {
 	
 	public static final String INDEX_DIRECTORY_PATH = "/home/syamantak/lucene/index";
+	public static final String KMEANS_INPUT_VECTOR_PATH = "/home/syamantak/kmeans/vectors";
+	public static final String KMEANS_INPUT_DICTIONARY_PATH = "/home/syamantak/kmeans/dictionary";
+	public static final String KMEANS_OUTPUT_DIRECTORY_PATH = "/home/syamantak/kmeans/clusters";
 	
-	public static final Version LUCENE_VERSION = Version.LUCENE_30;
+	public static final Version LUCENE_VERSION = Version.LUCENE_31;
 	
 	public static final String NEW_FILE_PREFIX = "uri";
 	public static final String NEW_FILE_SUFFIX = "new";

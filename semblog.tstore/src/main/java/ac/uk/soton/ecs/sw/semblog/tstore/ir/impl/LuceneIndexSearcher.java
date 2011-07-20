@@ -8,58 +8,85 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PhraseQuery;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.springframework.stereotype.Service;
 
 import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.SemblogConstants;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.BlogLink;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.TagTerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexSearcher;
 
 @Service
 public class LuceneIndexSearcher implements IIndexSearcher {
 
-	public List<ILink> searchTags(String[] searchTerms) {
+	public List<ILink> searchTags(String searchTerm) {
 		try {
+			System.out.println("LuceneIndexSearcher.searchTags");
 			List<ILink> urlList = new ArrayList<ILink>();
 			Directory dir = FSDirectory.open(new File(
 					SemblogConstants.INDEX_DIRECTORY_PATH));
 			IndexSearcher searcher = new IndexSearcher(dir);
-
-			PhraseQuery query = new PhraseQuery();
+			Term t = new Term("tag", searchTerm);
+			Query query = new TermQuery(t);		
 			
-			// if search terms has only one term, then 
-			// find exact match, else find close match
-			// i.e find match for n-1 words
-			if(searchTerms.length == 1){
-				query.setSlop(1);				
-			}else{				
-				query.setSlop(searchTerms.length - 1);
-			}
-
-			for (String word : searchTerms) {
-				query.add(new Term("tag", word));
-			}
-
 			TopDocs matches = searcher.search(query, 10);
+			if(matches.totalHits > 0){
+				System.out.println("LuceneIndexSearcher.searchTags found hits");
+			}else{
+				System.out.println("LuceneIndexSearcher.searchTags no hits");
+			}
 			for (ScoreDoc scoredoc : matches.scoreDocs) {
 				Document doc = searcher.doc(scoredoc.doc);
 				String url = doc.get("id");
 				ILink link = new BlogLink(url);
 				urlList.add(link);
 			}
+			searcher.close();
 			return urlList;
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return null;
 	}
 
-	public List<ILink> searchUrls(String searchUrl) {
-		// TODO Auto-generated method stub
+	public List<ITerm> searchUrls(String searchUrl) {
+		try {
+			List<ITerm> tagList = new ArrayList<ITerm>();
+			Directory dir = FSDirectory.open(new File(
+					SemblogConstants.INDEX_DIRECTORY_PATH));
+			IndexSearcher searcher = new IndexSearcher(dir);
+
+			Term t = new Term("id", searchUrl);
+			Query query = new TermQuery(t);
+
+			// retrieve only the top most document
+			TopDocs matches = searcher.search(query, 1);
+			if(matches.totalHits > 0 ){
+				System.out.println("LuceneIndexSearcher : Document Found in the index");
+			}
+			for (ScoreDoc scoredoc : matches.scoreDocs) {
+				Document doc = searcher.doc(scoredoc.doc);
+				String[] tags = doc.getValues("tag");
+				for (String tag : tags) {
+					System.out.println("LuceneIndexSearcher : tag : " + tag);
+					ITerm term = new TagTerm(tag);
+					tagList.add(term);
+				}
+
+			}
+			searcher.close();
+			return tagList;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		return null;
 	}
 

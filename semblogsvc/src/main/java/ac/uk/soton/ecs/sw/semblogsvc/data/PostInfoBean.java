@@ -4,12 +4,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 @XmlRootElement
-public class RelatedPostsBean {
+public class PostInfoBean {
 	
 	private String relatedUri = null;
 	private String title = null;
 	
-	public RelatedPostsBean(String uri, String title){
+	public PostInfoBean(String uri, String title){
 		this.relatedUri = uri;
 		this.title = title;
 	}

@@ -18,4 +18,21 @@ public class TagTerm implements ITerm{
 		this.termValue = term;
 	}
 
+	@Override
+	public int compareTo(ITerm o) {
+		if(this.termValue.equals(o.getTermValue()))
+			return 0;
+		return 1;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return compareTo((ITerm)obj) == 0;
+	}
+	
+	@Override
+	public int hashCode() {		
+		return termValue.hashCode();
+	}
+
 }

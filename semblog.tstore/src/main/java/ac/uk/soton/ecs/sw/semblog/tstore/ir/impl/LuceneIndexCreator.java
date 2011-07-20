@@ -35,7 +35,7 @@ public class LuceneIndexCreator implements IIndexCreator {
 
 			Document document = new Document();
 			document.add(new Field("id", doc.getDocId(), Field.Store.YES,
-					Field.Index.ANALYZED, TermVector.NO));
+					Field.Index.NOT_ANALYZED_NO_NORMS, TermVector.NO));
 			document.add(new Field("title", doc.getTitle(), Field.Store.YES,
 					Field.Index.ANALYZED, TermVector.NO));
 			for (ITerm term : doc.getTermList()) {

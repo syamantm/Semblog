@@ -21,7 +21,9 @@
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.1</org.slf4j-version>
 		<lucene.version>3.3.0</lucene.version>
+		<mahout.version>0.5</mahout.version>
 		<java-version>1.6</java-version>
+		
 	</properties>
 
 	<repositories>
@@ -113,6 +115,18 @@
 		</dependency>
 
 
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-core</artifactId>
+			<version>${mahout.version}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-utils</artifactId>
+			<version>${mahout.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

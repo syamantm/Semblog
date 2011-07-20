@@ -15,6 +15,7 @@
 	<ul>
 		<li><a href="#home">Home</a></li>		
 		<li><a href="#relatedPosts">Related Blog posts</a></li>
+		<li><a href="#similarPosts">Similar Blog posts</a></li>
 		<li><a href="#submitPosts">Submit New posts</a></li>
 		<li><a href="#register">Register</a></li>
 		<li><a href="#about">About Us</a></li>		
@@ -37,6 +38,19 @@
 		<div id="busyDialog"></div>
 		<h3>Results</h3>
 		<div id="relatedPostsResults">
+		</div>
+	</div>
+	
+	<div id="similarPosts">
+		<h2>Related Posts</h2>		
+		
+		<form class="textFormSimilar" action="<c:url value="/similarPosts/param" />" method="post">
+			<input id="searchSimilarUri" type="text" size="50" />
+			<input id="similarSumbit" type="submit" value="Search" />
+		</form>
+		
+		<h3>Results</h3>
+		<div id="similarPostsResults">
 		</div>
 	</div>
 	
@@ -125,6 +139,13 @@ $(document).ready(function() {
 		var form = $(this);
 		var resultsArea = $("#relatedPostsResults")
 		$.ajax({ type: "POST", url: form.attr("action"), data: $("#searchUri").val(), success: function(text) { MvcUtil.showSuccessResponse(text, resultsArea); }, error: function(xhr) { MvcUtil.showErrorResponse(xhr.responseText, resultsArea); }});
+		return false;
+	});
+	
+	$("form[class=textFormSimilar]").submit(function(event) {
+		var form = $(this);
+		var resultsArea = $("#similarPostsResults")
+		$.ajax({ type: "POST", url: form.attr("action"), data: $("#searchSimilarUri").val(), success: function(text) { MvcUtil.showSuccessResponse(text, resultsArea); }, error: function(xhr) { MvcUtil.showErrorResponse(xhr.responseText, resultsArea); }});
 		return false;
 	});
 	

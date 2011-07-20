@@ -14,6 +14,7 @@ import ac.uk.soton.ecs.sw.semblog.tstore.common.ILinkParser;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.IStatementConverter;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.TagTerm;
+import ac.uk.soton.ecs.sw.semblog.tstore.ir.IClusterCreator;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IDocument;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexCreator;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.impl.BlogDocument;
@@ -116,28 +117,27 @@ public class JenaRdfPersister implements IRdfPersister {
 
 	private void harvestTags(String url, Model linkedDataModel) {
 		logger.info("----- Index blog Begin ----- ");
-		
+
 		Property propTitle = new PropertyImpl("http://purl.org/dc/terms/",
 				"title");
 		NodeIterator itrTitle = linkedDataModel
-				.listObjectsOfProperty(propTitle);		
+				.listObjectsOfProperty(propTitle);
 		String title = null;
 		// extract the tags one by one
 		while (itrTitle.hasNext()) {
 			// get the content as literal
-			
+
 			RDFNode node = itrTitle.next();
 			if (node.isLiteral()) {
 				title = ((Literal) node).getLexicalForm();
 				logger.info("Found Title : " + title);
 			}
 		}
-			
+
 		// get the content from rdf
 		Property propTags = new PropertyImpl("http://purl.org/dc/terms/",
 				"subject");
-		NodeIterator iterator = linkedDataModel
-				.listObjectsOfProperty(propTags);
+		NodeIterator iterator = linkedDataModel.listObjectsOfProperty(propTags);
 		List<ITerm> termList = new ArrayList<ITerm>();
 
 		// extract the tags one by one
@@ -151,7 +151,7 @@ public class JenaRdfPersister implements IRdfPersister {
 			} else if (node.isResource()) {
 				Resource res = node.asResource();
 				String tagUrl = res.getURI();
-				if(!tagUrl.endsWith(".rdf")){
+				if (!tagUrl.endsWith(".rdf")) {
 					tagUrl = tagUrl + ".rdf";
 				}
 				FileManager fManager = FileManager.get();
@@ -178,6 +178,7 @@ public class JenaRdfPersister implements IRdfPersister {
 		IDocument doc = new BlogDocument(url, title, termList);
 		idxCreator.createindex(doc);
 		logger.info("----- Index blog End ----- ");
+
 	}
 
 }
