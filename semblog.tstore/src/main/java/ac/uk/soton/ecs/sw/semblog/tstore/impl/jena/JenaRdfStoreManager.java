@@ -1,6 +1,7 @@
 package ac.uk.soton.ecs.sw.semblog.tstore.impl.jena;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfPersister;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfStore;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfStoreManager;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IUrlScanner;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IClusterCreator;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IClusterSearcher;
 
@@ -47,11 +49,15 @@ public class JenaRdfStoreManager implements IRdfStoreManager {
 				break;
 			}
 		}
-		// if previous steps have failed, no need to run clustering 
+		// if previous steps have failed, no need to run clustering
 		if (status) {
 			status = clusterCreator.createClusters();
-			if(status){
-				status = clusterSearcher.searchCentroid();
+			if (status) {
+				Set<ILink>  similarPages = clusterSearcher
+						.retrieveSimilarPages("http://localhost/drupal-7.4/?q=node/3");
+				for (ILink url : similarPages) {
+					logger.info("Similar Page : " + url);
+				}
 			}
 		}
 		return status;

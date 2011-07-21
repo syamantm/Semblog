@@ -1,7 +1,6 @@
 package ac.uk.soton.ecs.sw.semblog.tstore.common.impl;
 
 import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
 
 public class BlogLink implements ILink{
 	
@@ -21,9 +20,7 @@ public class BlogLink implements ILink{
 
 	@Override
 	public int compareTo(ILink o) {
-		if(this.urlValue.equals(o.getUrlValue()))
-			return 0;
-		return 1;
+		return this.urlValue.compareTo(o.getUrlValue());			
 	}
 	
 	@Override
@@ -34,6 +31,11 @@ public class BlogLink implements ILink{
 	@Override
 	public int hashCode() {		
 		return urlValue.hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		return this.urlValue;
 	}
 
 }

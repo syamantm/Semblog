@@ -1,21 +1,14 @@
 package ac.uk.soton.ecs.sw.semblog.tstore;
 
-import static org.junit.Assert.*;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.impl.jena.JenaRdfPersister;
 import ac.uk.soton.ecs.sw.semblog.tstore.impl.jena.JenaRdfStore;
 import ac.uk.soton.ecs.sw.semblog.tstore.impl.jena.JenaRdfStoreManager;
-import ac.uk.soton.ecs.sw.semblog.tstore.impl.jena.LocalFolderScanner;
 
 import com.hp.hpl.jena.db.DBConnection;
 import com.hp.hpl.jena.db.ModelRDB;

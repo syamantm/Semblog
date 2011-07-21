@@ -2,28 +2,34 @@ package ac.uk.soton.ecs.sw.semblog.tstore.ir.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.mahout.clustering.AbstractCluster;
 import org.apache.mahout.clustering.Cluster;
+import org.apache.mahout.clustering.WeightedVectorWritable;
+import org.apache.mahout.common.distance.WeightedManhattanDistanceMeasure;
 import org.apache.mahout.common.iterator.sequencefile.PathFilters;
 import org.apache.mahout.common.iterator.sequencefile.PathType;
 import org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable;
 import org.apache.mahout.math.NamedVector;
-import org.apache.mahout.math.RandomAccessSparseVector;
-import org.apache.mahout.math.Vector.Element;
-import org.apache.mahout.math.VectorWritable;
+import org.apache.mahout.math.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.SemblogConstants;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.BlogLink;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IClusterSearcher;
 
 @Service
@@ -33,6 +39,44 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 			.getLogger(KMeansClusterSearcher.class);
 	protected static final List<List<Cluster>> clusterList = new ArrayList<List<Cluster>>();
 
+	Map<String, List<Vector>> clusterVectorMap = new HashMap<String, List<Vector>>();
+
+	@Override
+	public Set<ILink> retrieveSimilarPages(String url) {
+		Set<ILink> similarPages = new HashSet<ILink>();
+		try {
+
+			String idStr = getClusterId(url);
+			int clusterId = Integer.parseInt(idStr);
+			Path output = new Path(
+					SemblogConstants.KMEANS_OUTPUT_DIRECTORY_PATH);
+			Cluster cluster = KMeansClusterSearcher.getCluster(clusterId,
+					output);
+			List<Vector> clusterVectors = clusterVectorMap.get(idStr);
+			Vector center = cluster.getCenter();
+			Vector radius = cluster.getRadius();
+			if(radius != null){
+				ILink link = new BlogLink(((NamedVector)radius).getName());
+				similarPages.add(link);
+			}
+			WeightedManhattanDistanceMeasure measure = new WeightedManhattanDistanceMeasure();
+			
+			for (Vector vec : clusterVectors) {
+				NamedVector named = (NamedVector) vec;
+				double newDistance = measure.distance(center, vec);
+				logger.info("Distance between cennter and " + named.getName()
+						+ " is  : " + newDistance);
+				if (newDistance < SemblogConstants.ACCEPTABLE_DISTANCE) {
+					ILink link = new BlogLink(((NamedVector)named).getName());
+					similarPages.add(link);
+				} 
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}		
+		return similarPages;
+	}
+
 	@Override
 	public boolean searchCentroid() {
 		boolean status = true;
@@ -41,8 +85,6 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 					SemblogConstants.KMEANS_OUTPUT_DIRECTORY_PATH);
 			loadClusters(output);
 
-			//status = readSequenceFile();
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			status = false;
@@ -50,36 +92,47 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 		return status;
 	}
 
-	private boolean readSequenceFile() {
+	private String getClusterId(String url) {
 		logger.info("Reading sequencial file  -  begin");
-		boolean status = true;
+		String clusterId = null;
+		clusterVectorMap.clear();
 		try {
 			Configuration conf = new Configuration();
 			FileSystem fs = FileSystem.get(conf);
 			String vectorsPath = SemblogConstants.KMEANS_OUTPUT_DIRECTORY_PATH
-					+ "/clusters-1/part-r-00000";
+					+ "/clusteredPoints/part-m-0";
 			Path path = new Path(vectorsPath);
 
 			SequenceFile.Reader reader = new SequenceFile.Reader(fs, path, conf);
-			LongWritable key = new LongWritable();
-			VectorWritable value = new VectorWritable();
+			IntWritable key = new IntWritable();
+			WeightedVectorWritable value = new WeightedVectorWritable();
 			while (reader.next(key, value)) {
-				NamedVector namedVector = (NamedVector) value.get();
-				RandomAccessSparseVector vect = (RandomAccessSparseVector) namedVector
-						.getDelegate();
+				NamedVector namedVector = (NamedVector) value.getVector();				
+				clusterId = key.toString();
+				logger.info("Cluster ID : " + clusterId);
+				logger.info("Vector name : " + namedVector.getName());
+				if (clusterVectorMap.containsKey(clusterId)) {
+					List<Vector> list = clusterVectorMap.get(clusterId);
+					list.add(namedVector);
+					logger.info("Adding Key : " + clusterId + " value : " + namedVector.getName());
+					
+				} else {
+					List<Vector> list = new ArrayList<Vector>();
+					list.add(namedVector);
+					clusterVectorMap.put(clusterId, list);
+					logger.info("Adding Key : " + clusterId + " value : " + namedVector.getName());
+				}
 
-				for (Element e : vect) {
-					logger.info("Token: " + e.index()
-							+ ", TF-IDF weight: " + e.get());
+				if (namedVector.getName().equals(url)) {
+					clusterId = key.toString();					
 				}
 			}
 			reader.close();
 			logger.info("Reading sequencial file  -  end");
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			status = false;
 		}
-		return status;
+		return clusterId;
 
 	}
 
@@ -100,6 +153,40 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 			clusters.add(value);
 		}
 		return clusters;
+	}
+
+	protected static Cluster getCluster(int clusterId, Path output)
+			throws IOException {
+		Configuration conf = new Configuration();
+		Cluster cluster = null;
+		boolean found = false;
+		FileSystem fs = FileSystem.get(output.toUri(), conf);
+		for (FileStatus s : fs.listStatus(output, new ClustersFilter())) {
+			Path clustersIn = s.getPath();
+			for (Cluster value : new SequenceFileDirValueIterable<Cluster>(
+					clustersIn, PathType.LIST, PathFilters.logsCRCFilter(),
+					conf)) {
+				logger.info(
+						"Reading Cluster:{} center:{} numPoints:{} radius:{}",
+						new Object[] {
+								value.getId(),
+								AbstractCluster.formatVector(value.getCenter(),
+										null),
+								value.getNumPoints(),
+								AbstractCluster.formatVector(value.getRadius(),
+										null) });
+
+				if (value.getId() == clusterId) {
+					cluster = value;
+					found = true;
+					break;
+				}
+			}
+			if (found) {
+				break;
+			}
+		}
+		return cluster;
 	}
 
 	protected static void loadClusters(Path output) throws IOException {

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.BlogLink;
+import ac.uk.soton.ecs.sw.semblog.tstore.ir.IClusterSearcher;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexSearcher;
 import ac.uk.soton.ecs.sw.semblogsvc.data.PostInfoBean;
 
@@ -24,9 +25,9 @@ public class FindSimilarPostsSvc implements ISimilarPostsService {
 
 	@Autowired
 	private IRelatedPostsService relatedPostsSvc;
-
+	
 	@Autowired
-	private IIndexSearcher indexSearcher;
+	private IClusterSearcher clusterSearcher;
 
 	@Override
 	public PostInfoBean[] getSimilarPosts(String uri) {
@@ -34,38 +35,27 @@ public class FindSimilarPostsSvc implements ISimilarPostsService {
 		PostInfoBean[] similarPosts = null;
 		try {
 
-			logger.info("relatedPostsSvc.getRelatedPosts");
-			System.out.println("relatedPostsSvc.getRelatedPost");
+			logger.info("relatedPostsSvc.getRelatedPosts");			
 			PostInfoBean[] relatedPosts = relatedPostsSvc.getRelatedPosts(uri);
 
-			// We are interested in only unique tags and links, hence set ADT
-			Set<ITerm> termSet = new HashSet<ITerm>();
+			// We are interested in only unique links, hence set ADT			
 			Set<ILink> linkSet = new HashSet<ILink>();
 
 			for (PostInfoBean post : relatedPosts) {
-				logger.info("indexSearcher.searchUrls : "
+				logger.info("clusterSearcher.retrieveSimilarPages : "
 						+ post.getRelatedUri());
-				System.out.println("indexSearcher.searchUrls : "
-						+ post.getRelatedUri());
-				List<ITerm> tags = indexSearcher.searchUrls(post
-						.getRelatedUri());
-				termSet.addAll(tags);
-			}
+				Set<ILink> links = clusterSearcher.retrieveSimilarPages(post.getRelatedUri());				
+				logger.info("Set<ILink> links size : "
+						+ links.size());
+				linkSet.addAll(links);
+			}			
 			
-			Iterator<ITerm> itr = termSet.iterator();
-			while (itr.hasNext()) {
-				String term = itr.next().getTermValue();
-				List<ILink> links = indexSearcher.searchTags(term);
-				linkSet.addAll(links);				
-			}
-
 			if (linkSet.size() > 0) {
 				Set<ILink> relatedSet = convertToILink(relatedPosts);
 				// remove links that are already present in relatedPosts
 				linkSet.removeAll(relatedSet);
 				
-				logger.info("found similar posts by tag ");
-				System.out.println("found similar posts by tag ");
+				logger.info("found similar posts by tag : " + linkSet.size());				
 				
 				Iterator<ILink> linkItr = linkSet.iterator();
 				List<PostInfoBean> tempList = new ArrayList<PostInfoBean>();

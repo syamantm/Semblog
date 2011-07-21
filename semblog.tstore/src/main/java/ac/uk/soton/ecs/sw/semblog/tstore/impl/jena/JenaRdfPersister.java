@@ -14,7 +14,6 @@ import ac.uk.soton.ecs.sw.semblog.tstore.common.ILinkParser;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.IStatementConverter;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.TagTerm;
-import ac.uk.soton.ecs.sw.semblog.tstore.ir.IClusterCreator;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IDocument;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexCreator;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.impl.BlogDocument;

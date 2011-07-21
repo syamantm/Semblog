@@ -20,9 +20,7 @@ public class TagTerm implements ITerm{
 
 	@Override
 	public int compareTo(ITerm o) {
-		if(this.termValue.equals(o.getTermValue()))
-			return 0;
-		return 1;
+		return this.termValue.compareTo(o.getTermValue());			
 	}
 	
 	@Override
