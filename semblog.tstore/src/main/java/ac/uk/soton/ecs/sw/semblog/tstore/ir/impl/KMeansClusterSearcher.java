@@ -17,7 +17,8 @@ import org.apache.hadoop.io.SequenceFile;
 import org.apache.mahout.clustering.AbstractCluster;
 import org.apache.mahout.clustering.Cluster;
 import org.apache.mahout.clustering.WeightedVectorWritable;
-import org.apache.mahout.common.distance.WeightedManhattanDistanceMeasure;
+import org.apache.mahout.common.distance.DistanceMeasure;
+import org.apache.mahout.common.distance.EuclideanDistanceMeasure;
 import org.apache.mahout.common.iterator.sequencefile.PathFilters;
 import org.apache.mahout.common.iterator.sequencefile.PathType;
 import org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable;
@@ -59,7 +60,7 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 				ILink link = new BlogLink(((NamedVector)radius).getName());
 				similarPages.add(link);
 			}
-			WeightedManhattanDistanceMeasure measure = new WeightedManhattanDistanceMeasure();
+			DistanceMeasure measure = new EuclideanDistanceMeasure();
 			
 			for (Vector vec : clusterVectors) {
 				NamedVector named = (NamedVector) vec;

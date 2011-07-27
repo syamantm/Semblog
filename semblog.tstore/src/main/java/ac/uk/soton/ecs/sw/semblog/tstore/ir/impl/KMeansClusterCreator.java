@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.apache.mahout.clustering.kmeans.KMeansDriver;
 import org.apache.mahout.clustering.kmeans.RandomSeedGenerator;
 import org.apache.mahout.common.distance.DistanceMeasure;
+import org.apache.mahout.common.distance.EuclideanDistanceMeasure;
 import org.apache.mahout.common.distance.ManhattanDistanceMeasure;
 import org.apache.mahout.utils.vectors.lucene.Driver;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class KMeansClusterCreator implements IClusterCreator {
 	 */
 	protected void runKMeans() throws IOException, InterruptedException,
 			ClassNotFoundException {
-		DistanceMeasure measure = new ManhattanDistanceMeasure();
+		DistanceMeasure measure = new EuclideanDistanceMeasure();
 		Path input = new Path(SemblogConstants.KMEANS_INPUT_VECTOR_PATH);
 		Path output = new Path(SemblogConstants.KMEANS_OUTPUT_DIRECTORY_PATH);
 		Configuration conf = new Configuration();
@@ -106,7 +107,7 @@ public class KMeansClusterCreator implements IClusterCreator {
 		logger.info("KMeans - creating clusters");
 		Path clusters = RandomSeedGenerator.buildRandom(conf, input, new Path(
 				output, "clusters-0"), 3, measure);
-		double distanceThreshold = 0.001;
+		double distanceThreshold = 0.4;
 		KMeansDriver.run(input, clusters, output, measure, distanceThreshold,
 				maxIterations, true, true);
 
