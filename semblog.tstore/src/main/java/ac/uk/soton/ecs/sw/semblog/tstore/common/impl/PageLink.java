@@ -2,11 +2,11 @@ package ac.uk.soton.ecs.sw.semblog.tstore.common.impl;
 
 import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
 
-public class BlogLink implements ILink{
+public class PageLink implements ILink{
 	
 	private String urlValue;
 	
-	public BlogLink(String url){
+	public PageLink(String url){
 		this.urlValue = url;
 	}
 

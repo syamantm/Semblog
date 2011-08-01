@@ -1,6 +1,7 @@
 package ac.uk.soton.ecs.sw.semblogsvc.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -12,9 +13,11 @@ import org.springframework.stereotype.Service;
 
 import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.BlogLink;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.PageLink;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IClusterSearcher;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexSearcher;
+import ac.uk.soton.ecs.sw.semblog.tstore.ranking.AbstractBlogPost;
+import ac.uk.soton.ecs.sw.semblog.tstore.ranking.SemBlogPost;
 import ac.uk.soton.ecs.sw.semblogsvc.data.PostInfoBean;
 
 @Service
@@ -30,14 +33,14 @@ public class FindSimilarPostsSvc implements ISimilarPostsService {
 	private IClusterSearcher clusterSearcher;
 
 	@Override
-	public PostInfoBean[] getSimilarPosts(String uri) {
+	public PostInfoBean[] getSimilarPosts(String webpageUri) {
 
 		PostInfoBean[] similarPosts = null;
 		try {
 
 			logger.info("relatedPostsSvc.getRelatedPosts");			
-			PostInfoBean[] relatedPosts = relatedPostsSvc.getRelatedPosts(uri);
-
+			PostInfoBean[] relatedPosts = relatedPostsSvc.getRelatedPosts(webpageUri);
+			List<AbstractBlogPost> blogPostList = new ArrayList<AbstractBlogPost>();
 			// We are interested in only unique links, hence set ADT			
 			Set<ILink> linkSet = new HashSet<ILink>();
 
@@ -62,9 +65,24 @@ public class FindSimilarPostsSvc implements ISimilarPostsService {
 				
 				while (linkItr.hasNext()) {
 					String url = linkItr.next().getUrlValue();
-					PostInfoBean bean = relatedPostsSvc.getPostInfo(url);
-					tempList.add(bean);
+					/*PostInfoBean bean = relatedPostsSvc.getPostInfo(url);
+					tempList.add(bean);*/
+					AbstractBlogPost post = new SemBlogPost(url, webpageUri);
+					blogPostList.add(post);
 					
+				}
+				Collections.sort(blogPostList);
+				if(blogPostList.size() > 10 ){
+					List<AbstractBlogPost> subList = blogPostList.subList(0, 9);
+					for(AbstractBlogPost post : subList){
+						PostInfoBean bean = relatedPostsSvc.getPostInfo(post.getBlogUrl().getUrlValue(), post.getScore());
+						tempList.add(bean);
+					}
+				}else{
+					for(AbstractBlogPost post : blogPostList){
+						PostInfoBean bean = relatedPostsSvc.getPostInfo(post.getBlogUrl().getUrlValue(), post.getScore());
+						tempList.add(bean);
+					}
 				}
 				similarPosts = new PostInfoBean[tempList.size()];
 				tempList.toArray(similarPosts);
@@ -79,7 +97,7 @@ public class FindSimilarPostsSvc implements ISimilarPostsService {
 	private Set<ILink> convertToILink(PostInfoBean[] postInfoArr){
 		Set<ILink> links = new HashSet<ILink>();
 		for(PostInfoBean bean : postInfoArr){
-			ILink link = new BlogLink(bean.getRelatedUri());
+			ILink link = new PageLink(bean.getRelatedUri());
 			links.add(link);
 		}
 		return links;

@@ -1,6 +1,7 @@
 package ac.uk.soton.ecs.sw.semblogsvc.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfStore;
+import ac.uk.soton.ecs.sw.semblog.tstore.ranking.AbstractBlogPost;
+import ac.uk.soton.ecs.sw.semblog.tstore.ranking.SemBlogPost;
 import ac.uk.soton.ecs.sw.semblogsvc.data.PostInfoBean;
 import ac.uk.soton.ecs.sw.semblogsvc.dbl.IDbStore;
 import ac.uk.soton.ecs.sw.semblogsvc.dbl.JenaDbStore;
@@ -42,6 +45,7 @@ public class FindRelatedPostsSvc implements IRelatedPostsService {
 		QueryExecution qexec = null;
 		List<PostInfoBean> resultInfoList = null;
 		PostInfoBean[] relatedPosts = null;
+		List<AbstractBlogPost> blogPostList = new ArrayList<AbstractBlogPost>();
 		try {
 			initDbModel();
 
@@ -72,9 +76,29 @@ public class FindRelatedPostsSvc implements IRelatedPostsService {
 					Resource r = (Resource) n;
 					if (!r.isAnon()) {
 						String strUri = r.getURI();
-						PostInfoBean bean = createPageInfo(strUri);
-						resultInfoList.add(bean);
+						AbstractBlogPost post = new SemBlogPost(strUri, uri);
+						blogPostList.add(post);
+						/*PostInfoBean bean = createPageInfo(strUri);
+						resultInfoList.add(bean);*/
 					}
+				}
+			}
+			Collections.sort(blogPostList);			
+			
+			if(blogPostList.size() > 10 ){
+				List<AbstractBlogPost> subList = blogPostList.subList(0, 9);
+				for(AbstractBlogPost post : subList){
+					logger.info("post url : " + post.getBlogUrl().getUrlValue() );
+					logger.info("post score : " +  post.getScore() );
+					PostInfoBean bean = createPageInfo(post.getBlogUrl().getUrlValue(), post.getScore());
+					resultInfoList.add(bean);
+				}
+			}else{
+				for(AbstractBlogPost post : blogPostList){
+					logger.info("post url : " + post.getBlogUrl().getUrlValue() );
+					logger.info("post score : " +  post.getScore() );
+					PostInfoBean bean = createPageInfo(post.getBlogUrl().getUrlValue(), post.getScore());
+					resultInfoList.add(bean);
 				}
 			}
 			relatedPosts = new PostInfoBean[resultInfoList.size()];
@@ -97,15 +121,15 @@ public class FindRelatedPostsSvc implements IRelatedPostsService {
 
 	}
 
-	public PostInfoBean getPostInfo(String strUri) {
+	public PostInfoBean getPostInfo(String strUri,  Double score) {
 
 		initDbModel();
-		PostInfoBean bean = createPageInfo(strUri);
+		PostInfoBean bean = createPageInfo(strUri, score);
 		dbModel.close();
 		return bean;
 	}
 
-	private PostInfoBean createPageInfo(String strUri) {
+	private PostInfoBean createPageInfo(String strUri, Double score) {
 		QueryExecution qexec;
 		String sparqlTitleString = "SELECT ?title WHERE { <" + strUri
 				+ "> <http://purl.org/dc/terms/title> ?title }";
@@ -126,6 +150,7 @@ public class FindRelatedPostsSvc implements IRelatedPostsService {
 			}
 		}
 		PostInfoBean bean = new PostInfoBean(strUri, title);
+		bean.setScore(score.toString());
 		logger.info("Found related URI : " + strUri + " With Title : " + title);
 		qexec.close();
 		return bean;

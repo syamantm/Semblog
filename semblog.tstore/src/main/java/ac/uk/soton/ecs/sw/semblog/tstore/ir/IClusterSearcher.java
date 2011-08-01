@@ -17,5 +17,7 @@ public interface IClusterSearcher {
 	 * @return 
 	 */
 	public Set<ILink> retrieveSimilarPages(String url);
+	
+	public double getDistanceFromCenter(String url);
 
 }

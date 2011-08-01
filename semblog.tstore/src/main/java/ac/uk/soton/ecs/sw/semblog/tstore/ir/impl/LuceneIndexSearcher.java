@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.SemblogConstants;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.BlogLink;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.PageLink;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.TagTerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexSearcher;
 
@@ -44,7 +44,7 @@ public class LuceneIndexSearcher implements IIndexSearcher {
 			for (ScoreDoc scoredoc : matches.scoreDocs) {
 				Document doc = searcher.doc(scoredoc.doc);
 				String url = doc.get("id");
-				ILink link = new BlogLink(url);
+				ILink link = new PageLink(url);
 				urlList.add(link);
 			}
 			searcher.close();

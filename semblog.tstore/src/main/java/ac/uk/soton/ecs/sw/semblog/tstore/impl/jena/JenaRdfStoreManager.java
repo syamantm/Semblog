@@ -1,8 +1,5 @@
 package ac.uk.soton.ecs.sw.semblog.tstore.impl.jena;
 
-import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,8 +9,11 @@ import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfStore;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfStoreManager;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IUrlScanner;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.PageLink;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IClusterCreator;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IClusterSearcher;
+import ac.uk.soton.ecs.sw.semblog.tstore.ranking.AbstractBlogPost;
+import ac.uk.soton.ecs.sw.semblog.tstore.ranking.SemBlogPost;
 
 @Component("jenaRdfStoreManager")
 public class JenaRdfStoreManager implements IRdfStoreManager {
@@ -39,6 +39,8 @@ public class JenaRdfStoreManager implements IRdfStoreManager {
 	public boolean run() {
 		boolean status = true;
 		rdfStore.createInitModel();
+		//DefaultScoreCalculator.init();
+		/*
 		List<String> rdfUrls = urlScanner.getRdfUrlList();
 		for (String url : rdfUrls) {
 			status = persister.persistRdf(url, rdfStore);
@@ -60,6 +62,11 @@ public class JenaRdfStoreManager implements IRdfStoreManager {
 				}
 			}
 		}
+		*/
+		ILink blog = new PageLink("http://localhost/drupal-7.4/?q=node/5");
+		ILink webpage = new PageLink("http://www.w3.org/2001/sw/Europe/reports/demo_1_report/");
+		AbstractBlogPost post = new SemBlogPost(blog, webpage);
+		System.out.println("Score : " + post.getScore());
 		return status;
 	}
 

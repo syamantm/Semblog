@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 
 import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.SemblogConstants;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.BlogLink;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.PageLink;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IClusterSearcher;
 
 @Service
@@ -41,6 +41,8 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 	protected static final List<List<Cluster>> clusterList = new ArrayList<List<Cluster>>();
 
 	Map<String, List<Vector>> clusterVectorMap = new HashMap<String, List<Vector>>();
+	
+	private Vector currentPageVector = null;
 
 	@Override
 	public Set<ILink> retrieveSimilarPages(String url) {
@@ -56,25 +58,25 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 			List<Vector> clusterVectors = clusterVectorMap.get(idStr);
 			Vector center = cluster.getCenter();
 			Vector radius = cluster.getRadius();
-			if(radius != null){
-				ILink link = new BlogLink(((NamedVector)radius).getName());
+			if (radius != null) {
+				ILink link = new PageLink(((NamedVector) radius).getName());
 				similarPages.add(link);
 			}
 			DistanceMeasure measure = new EuclideanDistanceMeasure();
-			
+
 			for (Vector vec : clusterVectors) {
 				NamedVector named = (NamedVector) vec;
 				double newDistance = measure.distance(center, vec);
-				logger.info("Distance between cennter and " + named.getName()
+				logger.info("Distance between center and " + named.getName()
 						+ " is  : " + newDistance);
 				if (newDistance < SemblogConstants.ACCEPTABLE_DISTANCE) {
-					ILink link = new BlogLink(((NamedVector)named).getName());
+					ILink link = new PageLink(((NamedVector) named).getName());
 					similarPages.add(link);
-				} 
+				}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-		}		
+		}
 		return similarPages;
 	}
 
@@ -108,24 +110,27 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 			IntWritable key = new IntWritable();
 			WeightedVectorWritable value = new WeightedVectorWritable();
 			while (reader.next(key, value)) {
-				NamedVector namedVector = (NamedVector) value.getVector();				
+				NamedVector namedVector = (NamedVector) value.getVector();
 				clusterId = key.toString();
 				logger.info("Cluster ID : " + clusterId);
 				logger.info("Vector name : " + namedVector.getName());
 				if (clusterVectorMap.containsKey(clusterId)) {
 					List<Vector> list = clusterVectorMap.get(clusterId);
 					list.add(namedVector);
-					logger.info("Adding Key : " + clusterId + " value : " + namedVector.getName());
-					
+					logger.info("Adding Key : " + clusterId + " value : "
+							+ namedVector.getName());
+
 				} else {
 					List<Vector> list = new ArrayList<Vector>();
 					list.add(namedVector);
 					clusterVectorMap.put(clusterId, list);
-					logger.info("Adding Key : " + clusterId + " value : " + namedVector.getName());
+					logger.info("Adding Key : " + clusterId + " value : "
+							+ namedVector.getName());
 				}
 
 				if (namedVector.getName().equals(url)) {
-					clusterId = key.toString();					
+					currentPageVector = namedVector;
+					clusterId = key.toString();
 				}
 			}
 			reader.close();
@@ -197,6 +202,27 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 			List<Cluster> clusters = readClusters(s.getPath());
 			clusterList.add(clusters);
 		}
+	}
+
+	@Override
+	public double getDistanceFromCenter(String url) {
+		double newDistance = 0.0d;
+		try {
+
+			String idStr = getClusterId(url);
+			int clusterId = Integer.parseInt(idStr);
+			Path output = new Path(
+					SemblogConstants.KMEANS_OUTPUT_DIRECTORY_PATH);
+			Cluster cluster = KMeansClusterSearcher.getCluster(clusterId,
+					output);
+
+			Vector center = cluster.getCenter();
+			DistanceMeasure measure = new EuclideanDistanceMeasure();
+			newDistance = measure.distance(center, currentPageVector);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return newDistance;
 	}
 
 }

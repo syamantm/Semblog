@@ -51,7 +51,7 @@ public class RdfStoreTest {
 		assertTrue(status);
 	}
 
-	@Test
+	/*@Test
 	public void test4_query() {
 		JenaRdfStore store = new JenaRdfStore();
 		boolean status = testQueryByPredicate(store);
@@ -60,6 +60,9 @@ public class RdfStoreTest {
 		status = testQueryByObject(store);
 		assertTrue(status);
 	}
+	*/
+	
+	
 
 	public static boolean testJenaRdfQuery(JenaRdfStore store) {
 

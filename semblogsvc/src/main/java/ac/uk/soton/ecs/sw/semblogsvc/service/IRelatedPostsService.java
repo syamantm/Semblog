@@ -6,6 +6,6 @@ public interface IRelatedPostsService {
 	
 	public PostInfoBean[] getRelatedPosts(String uri) ;
 	
-	public PostInfoBean getPostInfo(String strUri) ;
+	public PostInfoBean getPostInfo(String strUri, Double score) ;
 
 }

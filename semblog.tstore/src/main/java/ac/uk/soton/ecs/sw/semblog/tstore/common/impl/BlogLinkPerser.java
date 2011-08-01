@@ -43,7 +43,7 @@ public class BlogLinkPerser implements ILinkParser {
 							.getAttribute(Attribute.HREF);
 					address = normalizeUrl(address);
 					logger.info("Found link : " + address);
-					BlogLink link = new BlogLink(address);
+					PageLink link = new PageLink(address);
 					urlList.add(link);
 				}
 			}

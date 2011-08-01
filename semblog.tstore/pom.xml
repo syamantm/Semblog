@@ -131,6 +131,12 @@
 			<artifactId>mahout-utils</artifactId>
 			<version>${mahout.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-examples</artifactId>
+			<version>${mahout.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -165,7 +171,7 @@
 						<index>true</index>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>ac.uk.soton.ecs.sw.semblog.tstore.ir.impl.PlotKMeans</mainClass>
+							<mainClass>ac.uk.soton.ecs.sw.semblog.tstore.classifier.MainClassifier</mainClass>
 						</manifest>
 						<manifestEntries>
 							<mode>development</mode>
@@ -186,7 +192,7 @@
 							<goal>java</goal>
 						</goals>
 						<configuration>
-							<mainClass>ac.uk.soton.ecs.sw.semblog.tstore.ir.impl.PlotKMeans</mainClass>
+							<mainClass>ac.uk.soton.ecs.sw.semblog.tstore.classifier.MainClassifier</mainClass>
 							<arguments>								
 							</arguments>
 						</configuration>
