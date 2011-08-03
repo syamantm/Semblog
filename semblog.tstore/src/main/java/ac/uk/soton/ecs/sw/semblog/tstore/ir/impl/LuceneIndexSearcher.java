@@ -15,11 +15,11 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.springframework.stereotype.Service;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ITerm;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.PageLink;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.SemblogConstants;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.PageLink;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.TagTerm;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.TagTerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexSearcher;
 
 @Service

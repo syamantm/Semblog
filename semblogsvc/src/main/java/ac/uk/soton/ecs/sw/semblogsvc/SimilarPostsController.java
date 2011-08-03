@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ITerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexSearcher;
 import ac.uk.soton.ecs.sw.semblogsvc.data.PostInfoBean;
 import ac.uk.soton.ecs.sw.semblogsvc.service.ISimilarPostsService;

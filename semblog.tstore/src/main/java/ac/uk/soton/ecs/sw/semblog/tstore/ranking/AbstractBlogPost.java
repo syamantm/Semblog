@@ -2,8 +2,8 @@ package ac.uk.soton.ecs.sw.semblog.tstore.ranking;
 
 import org.apache.log4j.Logger;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.PageLink;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.PageLink;
 
 public abstract class AbstractBlogPost implements Comparable<AbstractBlogPost>{
 	

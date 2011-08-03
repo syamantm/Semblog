@@ -1,4 +1,4 @@
-package ac.uk.soton.ecs.sw.semblog.tstore.common;
+package ac.uk.soton.ecs.sw.semblog.tstore.api;
 
 import java.util.List;
 

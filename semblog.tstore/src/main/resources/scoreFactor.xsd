@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://jaxb.semblog.sw.ecs.soton.uk.ac/"
+	xmlns="http://jaxb.semblog.sw.ecs.soton.uk.ac/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<xsd:complexType name="scoreFactorType">
+		<xsd:sequence>
+			<xsd:element name="scoreFactorBean" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+
+			<xsd:element name="defaultWeightage" type="xsd:double"
+				minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element name="scoreFactor">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="scoreFactor" type="scoreFactorType"
+					maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+</xsd:schema>

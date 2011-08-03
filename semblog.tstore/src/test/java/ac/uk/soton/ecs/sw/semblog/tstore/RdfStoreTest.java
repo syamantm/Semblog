@@ -46,7 +46,7 @@ public class RdfStoreTest {
 				"META-INF/appContext.xml");
 		BeanFactory factory = context;
 		JenaRdfStoreManager storeMgr = (JenaRdfStoreManager) factory
-				.getBean("jenaRdfStoreManager");
+				.getBean("jenaRdfStoreManager");		
 		boolean status = storeMgr.run();
 		assertTrue(status);
 	}

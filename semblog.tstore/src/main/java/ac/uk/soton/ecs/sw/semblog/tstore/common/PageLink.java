@@ -1,6 +1,6 @@
-package ac.uk.soton.ecs.sw.semblog.tstore.common.impl;
+package ac.uk.soton.ecs.sw.semblog.tstore.common;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
 
 public class PageLink implements ILink{
 	

@@ -2,7 +2,7 @@ package ac.uk.soton.ecs.sw.semblog.tstore.ir;
 
 import java.util.List;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ITerm;
 
 public interface IDocument {
 

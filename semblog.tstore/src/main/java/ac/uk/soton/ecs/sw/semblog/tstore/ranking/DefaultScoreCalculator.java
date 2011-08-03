@@ -2,57 +2,84 @@ package ac.uk.soton.ecs.sw.semblog.tstore.ranking;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import javax.annotation.PostConstruct;
+import org.apache.log4j.Logger;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.AppContextManager;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.JaxbContextLoader;
+import ac.uk.soton.ecs.sw.semblog.tstore.impl.jena.JenaRdfStoreManager1;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
-import ac.uk.soton.ecs.sw.semblog.tstore.ranking.factor.DateScoreFactor;
-import ac.uk.soton.ecs.sw.semblog.tstore.ranking.factor.PredicateScoreFactor;
-import ac.uk.soton.ecs.sw.semblog.tstore.ranking.factor.VectorDistanceScoreFactor;
+public final class DefaultScoreCalculator implements IScoreCalculator {
 
+	private static final Logger logger = Logger
+			.getLogger(DefaultScoreCalculator.class);
 
-public final class DefaultScoreCalculator implements IScoreCalculator{
-	
 	List<AbstractScoreFactor> scoreFactorList = new ArrayList<AbstractScoreFactor>();
 
 	private static DefaultScoreCalculator instance = null;
-	
-	public DefaultScoreCalculator(){
-		
+
+	public DefaultScoreCalculator() {
+
 	}
-	
-	public static DefaultScoreCalculator getInstance(){
-		if(instance == null){
+
+	public static DefaultScoreCalculator getInstance() {
+		if (instance == null) {
 			instance = new DefaultScoreCalculator();
 			init();
 		}
 		return instance;
-	}		
-	
-	public static void init(){
-		AbstractScoreFactor dateFactor = new DateScoreFactor(0.4);
-		AbstractScoreFactor prediacteFactor = new PredicateScoreFactor(0.3);
-		AbstractScoreFactor vectorFactor = new VectorDistanceScoreFactor(0.3);
-		
-		DefaultScoreCalculator.getInstance().registerScoreFactor(dateFactor);
-		DefaultScoreCalculator.getInstance().registerScoreFactor(prediacteFactor);
-		DefaultScoreCalculator.getInstance().registerScoreFactor(vectorFactor);
 	}
-	
-	
-	
+
+	/**
+	 * Load all the Score Factors from scoreFactor.xml configuration file using
+	 * ac.uk.soton.ecs.sw.semblog.tstore.common.JaxbContextLoader
+	 */
+	public static void init() {
+		/*
+		 * AbstractScoreFactor dateFactor = new DateScoreFactor(0.4);
+		 * AbstractScoreFactor prediacteFactor = new PredicateScoreFactor(0.3);
+		 * AbstractScoreFactor vectorFactor = new
+		 * VectorDistanceScoreFactor(0.3);
+		 * 
+		 * DefaultScoreCalculator.getInstance().registerScoreFactor(dateFactor);
+		 * DefaultScoreCalculator
+		 * .getInstance().registerScoreFactor(prediacteFactor);
+		 * DefaultScoreCalculator
+		 * .getInstance().registerScoreFactor(vectorFactor);
+		 */
+		try {
+			Map<String, Double> scoreFactors = JaxbContextLoader
+					.loadScoreFactors();
+			for (String beanName : scoreFactors.keySet()) {
+				
+				AbstractScoreFactor factor = (AbstractScoreFactor) AppContextManager.getAppContext()
+						.getBean(beanName);				
+				if (factor != null) {
+
+					double weightage = scoreFactors.get(beanName);
+					factor.setWeightage(weightage);
+					logger.info("Bean Name : " + beanName + " weightage : "
+							+ weightage);
+				}
+				DefaultScoreCalculator.getInstance()
+						.registerScoreFactor(factor);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
 	@Override
 	public void registerScoreFactor(AbstractScoreFactor factor) {
-		scoreFactorList.add(factor);		
+		scoreFactorList.add(factor);
 	}
 
 	@Override
 	public double calculateScore(ILink blog, ILink webpage) {
 		double score = 0.0;
-		for(AbstractScoreFactor factor : scoreFactorList){
+		for (AbstractScoreFactor factor : scoreFactorList) {
 			score += factor.calculateScore(blog, webpage);
 		}
 		return score;

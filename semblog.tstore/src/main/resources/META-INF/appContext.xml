@@ -10,6 +10,8 @@
            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 	
 	<context:component-scan base-package="ac.uk.soton.ecs.sw.semblog.tstore" />
+	
+	
 
 <!--
 	<context:component-scan base-package="ac.uk.soton.ecs.sw.semblog.tstore.impl.jena" />
@@ -17,5 +19,7 @@
 	<context:component-scan base-package="ac.uk.soton.ecs.sw.semblog.tstore.ir" />
 	<context:component-scan base-package="ac.uk.soton.ecs.sw.semblog.tstore.ranking" />
 -->	
+
+    <bean id="contextApplicationContextProvider" class="ac.uk.soton.ecs.sw.semblog.tstore.common.ApplicationContextProvider"></bean>  
 
 </beans>

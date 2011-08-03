@@ -1,4 +1,4 @@
-package ac.uk.soton.ecs.sw.semblog.tstore.impl.jena;
+package ac.uk.soton.ecs.sw.semblog.tstore.impl.drupal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,13 +7,13 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILinkParser;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfPersister;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfStore;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILinkParser;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.IStatementConverter;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.TagTerm;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.IStatementConverter;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ITerm;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.TagTerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IDocument;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexCreator;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.impl.BlogDocument;
@@ -32,10 +32,10 @@ import com.hp.hpl.jena.rdf.model.impl.ResourceImpl;
 import com.hp.hpl.jena.util.FileManager;
 
 @Component
-public class JenaRdfPersister implements IRdfPersister {
+public class DrupalRdfPersister implements IRdfPersister {
 
 	private static final Logger logger = Logger
-			.getLogger(JenaRdfPersister.class);
+			.getLogger(DrupalRdfPersister.class);
 
 	@Autowired
 	private ILinkParser linkParser;

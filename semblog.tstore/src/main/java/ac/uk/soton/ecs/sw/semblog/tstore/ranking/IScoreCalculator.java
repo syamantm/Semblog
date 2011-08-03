@@ -1,6 +1,6 @@
 package ac.uk.soton.ecs.sw.semblog.tstore.ranking;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
 
 public interface IScoreCalculator {
 	

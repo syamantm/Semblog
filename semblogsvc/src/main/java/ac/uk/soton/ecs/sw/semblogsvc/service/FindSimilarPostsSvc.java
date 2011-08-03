@@ -11,9 +11,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.PageLink;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ITerm;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.PageLink;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IClusterSearcher;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexSearcher;
 import ac.uk.soton.ecs.sw.semblog.tstore.ranking.AbstractBlogPost;

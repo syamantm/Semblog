@@ -6,8 +6,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfRetriever;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
 import ac.uk.soton.ecs.sw.semblog.tstore.impl.jena.JenaRdfRetriever;
 import ac.uk.soton.ecs.sw.semblog.tstore.ranking.AbstractScoreFactor;
 

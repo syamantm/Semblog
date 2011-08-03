@@ -1,6 +1,6 @@
-package ac.uk.soton.ecs.sw.semblog.tstore.common.impl;
+package ac.uk.soton.ecs.sw.semblog.tstore.common;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ITerm;
 
 public class TagTerm implements ITerm{
 	

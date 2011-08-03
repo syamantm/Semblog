@@ -3,7 +3,7 @@ package ac.uk.soton.ecs.sw.semblog.tstore.ranking;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
 
 @Component
 public class SemBlogPost extends AbstractBlogPost {

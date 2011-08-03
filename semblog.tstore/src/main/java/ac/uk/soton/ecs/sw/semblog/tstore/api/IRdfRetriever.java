@@ -1,6 +1,5 @@
 package ac.uk.soton.ecs.sw.semblog.tstore.api;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
 
 public interface IRdfRetriever {
 	

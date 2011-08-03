@@ -28,9 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.PageLink;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.SemblogConstants;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.impl.PageLink;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IClusterSearcher;
 
 @Service

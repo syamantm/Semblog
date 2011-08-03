@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ITerm;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ITerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IDocument;
 
 @Component

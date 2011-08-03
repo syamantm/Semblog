@@ -9,9 +9,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfRetriever;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfStore;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
 
 import com.hp.hpl.jena.db.DBConnection;
 import com.hp.hpl.jena.db.ModelRDB;

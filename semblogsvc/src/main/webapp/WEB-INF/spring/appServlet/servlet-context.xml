@@ -37,4 +37,7 @@
 	<!-- Imports user-defined @Controller beans that process client requests -->
 	<beans:import resource="controllers.xml" />
 	
+	<!-- Create a context aware bean -->
+	<beans:bean id="contextApplicationContextProvider" class="ac.uk.soton.ecs.sw.semblog.tstore.common.ApplicationContextProvider"/>
+	  
 </beans:beans>

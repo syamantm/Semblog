@@ -1,4 +1,4 @@
-package ac.uk.soton.ecs.sw.semblog.tstore.common.impl;
+package ac.uk.soton.ecs.sw.semblog.tstore.common;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -14,14 +14,14 @@ import javax.swing.text.html.parser.ParserDelegator;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILink;
-import ac.uk.soton.ecs.sw.semblog.tstore.common.ILinkParser;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.ILinkParser;
 
 @Component
-public class BlogLinkPerser implements ILinkParser {
+public class DefaultBlogLinkPerser implements ILinkParser {
 
 	private static final Logger logger = Logger
-			.getLogger(BlogLinkPerser.class);
+			.getLogger(DefaultBlogLinkPerser.class);
 	
 	private List<ILink> urlList = new ArrayList<ILink>();
 
