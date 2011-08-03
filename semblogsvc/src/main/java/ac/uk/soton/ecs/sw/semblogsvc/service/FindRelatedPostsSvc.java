@@ -55,7 +55,7 @@ public class FindRelatedPostsSvc implements IRelatedPostsService {
 					+ "^^<http://www.w3.org/2001/XMLSchema#anyURI> }";
 
 			logger.info(sparqlQueryString);
-			/* System.out.println("------"); */
+			System.out.println("Query " + sparqlQueryString);
 			Query query = QueryFactory.create(sparqlQueryString);
 			qexec = QueryExecutionFactory.create(query, dbModel);
 
@@ -96,7 +96,9 @@ public class FindRelatedPostsSvc implements IRelatedPostsService {
 			}else{
 				for(AbstractBlogPost post : blogPostList){
 					logger.info("post url : " + post.getBlogUrl().getUrlValue() );
+					System.out.println("post url : " + post.getBlogUrl().getUrlValue() );
 					logger.info("post score : " +  post.getScore() );
+					System.out.println("post score : " +  post.getScore());
 					PostInfoBean bean = createPageInfo(post.getBlogUrl().getUrlValue(), post.getScore());
 					resultInfoList.add(bean);
 				}

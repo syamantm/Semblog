@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.AppContextManager;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.JaxbContextLoader;
-import ac.uk.soton.ecs.sw.semblog.tstore.impl.jena.JenaRdfStoreManager1;
 
 public final class DefaultScoreCalculator implements IScoreCalculator {
 

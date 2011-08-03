@@ -32,6 +32,7 @@ public abstract class AbstractRdfStoreManager implements IRdfStoreManager {
 	
 	protected IUrlScanner urlScanner;
 	
+		
 	
 	@Autowired
 	private IClusterCreator clusterCreator;
@@ -47,6 +48,7 @@ public abstract class AbstractRdfStoreManager implements IRdfStoreManager {
 	
 	public abstract void harvestRdf();
 	
+		
 	public void createClusters(){
 		boolean status = clusterCreator.createClusters();
 		if (status) {

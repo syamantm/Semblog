@@ -1,4 +1,4 @@
-package ac.uk.soton.ecs.sw.semblog.tstore.impl.html;
+package ac.uk.soton.ecs.sw.semblog.tstore.impl.rdfa;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -39,22 +39,28 @@ import com.hp.hpl.jena.rdf.model.impl.ResourceImpl;
 import com.hp.hpl.jena.util.FileManager;
 
 @Component
-public class SimpleHtmlBlogPersister extends AbstractRdfPersister {
+public class SimpleRdfaBlogPersister extends AbstractRdfPersister {
 
 	private static final Logger logger = Logger
-			.getLogger(SimpleHtmlBlogPersister.class);
+			.getLogger(SimpleRdfaBlogPersister.class);
 
 	private HtmlCleaner cleaner = new HtmlCleaner();
+	
+	private final String[] RDFA_ATTRIBUTES = {"rel","rev", "content", "about", "property", "typeof"};
 
 	@Autowired
 	private IStatementConverter<ILink> stmtConverter;
-
+	
+	private TagNode rootNode;
+	private String rootUrl;
+	
 	public boolean persistRdf(String url, IRdfStore rdfStore) {
 		logger.info("Persisting : " + url);
 		boolean status = true;
 		DBConnection connection = null;
 		ModelRDB model = null;
 		try {
+			rootUrl = url;
 			// The database backend initialization.
 			logger.info("Creating db connection");
 			connection = rdfStore.getDBConnection();
@@ -63,7 +69,10 @@ public class SimpleHtmlBlogPersister extends AbstractRdfPersister {
 			model = ModelRDB.open(connection, rdfStore.getModelName());
 			logger.info("Model opened db connection");
 
-			harvestLinksFromContent(url, model);
+			rootNode = cleaner.clean(new URL(rootUrl));
+			harvestLinksFromContent(model);
+			
+			harvestRdfaAttrib(model);
 
 			logger.info("Data added to model");
 			connection.close();
@@ -79,20 +88,20 @@ public class SimpleHtmlBlogPersister extends AbstractRdfPersister {
 
 	}
 
-	private void harvestLinksFromContent(String url, Model linkedDataModel)
+	protected void harvestLinksFromContent(Model linkedDataModel)
 			throws MalformedURLException, IOException {
 		logger.info("----- Reading Content Begin ----- ");
-		TagNode rootNode = cleaner.clean(new URL(url));
+		
 		List<ILink> links = new ArrayList<ILink>();
 		TagNode[] tagArray = rootNode.getElementsByName("a", true);
 		logger.info("link count : " + tagArray.length);
 		for (TagNode node : tagArray) {
 			String href = node.getAttributeByName("href");
-			logger.info("found link : " + href);
+			//logger.info("found link : " + href);
 			if (href.startsWith("http")) {
 				ILink link = new PageLink(href);
 				links.add(link);
-				Resource subject = new ResourceImpl(url);
+				Resource subject = new ResourceImpl(rootUrl);
 				List<Statement> statements = stmtConverter.convertLinks(subject,
 						links);
 				linkedDataModel.add(statements);
@@ -100,6 +109,51 @@ public class SimpleHtmlBlogPersister extends AbstractRdfPersister {
 		}
 		linkedDataModel.commit();
 		logger.info("----- Reading Content End ----- ");
+	}
+	
+	protected void harvestRdfaAttrib(Model linkedDataModel){
+		harvestTitle(linkedDataModel);
+		harvestCreatedDate(linkedDataModel);
+		harvestCreator(linkedDataModel);		
+	}
+
+	protected void harvestTitle(Model linkedDataModel) {
+		logger.info("Looking for Title" );
+		List<TagNode> tagList = rootNode.getElementListByAttValue("property", "dc:title", true, true);
+		logger.info("tag count for property dc:title : " + tagList.size() );
+		for(TagNode node : tagList){
+			String title = node.getText().toString();
+			logger.info("Title : " + title);
+			Resource subject = new ResourceImpl(rootUrl);
+			Statement stmt = stmtConverter.convertTitle(subject, title);
+			linkedDataModel.add(stmt);
+		}
+	}
+	
+	protected void harvestCreatedDate(Model linkedDataModel) {
+		logger.info("Looking for Title" );
+		List<TagNode> tagList = rootNode.getElementListByAttValue("property", "dc:created", true, true);
+		logger.info("tag count for property dc:title : " + tagList.size() );
+		for(TagNode node : tagList){
+			String date = node.getText().toString();
+			logger.info("Date : " + date);
+			Resource subject = new ResourceImpl(rootUrl);
+			Statement stmt = stmtConverter.convertCreationDate(subject, date);
+			linkedDataModel.add(stmt);
+		}
+	}
+	
+	protected void harvestCreator(Model linkedDataModel) {
+		logger.info("Looking for Title" );
+		List<TagNode> tagList = rootNode.getElementListByAttValue("property", "dc:creator", true, true);
+		logger.info("tag count for property dc:title : " + tagList.size() );
+		for(TagNode node : tagList){
+			String author = node.getText().toString();
+			logger.info("Creator : " + author);
+			Resource subject = new ResourceImpl(rootUrl);
+			Statement stmt = stmtConverter.convertCreator(subject, author);
+			linkedDataModel.add(stmt);
+		}
 	}
 
 }

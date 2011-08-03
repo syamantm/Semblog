@@ -13,6 +13,7 @@ import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfPersister;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfStore;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IStatementConverter;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.ITerm;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.AbstractRdfPersister;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.TagTerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IDocument;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexCreator;
@@ -32,7 +33,7 @@ import com.hp.hpl.jena.rdf.model.impl.ResourceImpl;
 import com.hp.hpl.jena.util.FileManager;
 
 @Component
-public class DrupalRdfPersister implements IRdfPersister {
+public class DrupalRdfPersister extends AbstractRdfPersister {
 
 	private static final Logger logger = Logger
 			.getLogger(DrupalRdfPersister.class);
@@ -63,6 +64,7 @@ public class DrupalRdfPersister implements IRdfPersister {
 
 			FileManager fManager = FileManager.get();
 			fManager.addLocatorURL();
+			
 			linkedDataModel = fManager.loadModel(url);
 
 			// harvest links from the blog content
@@ -74,14 +76,21 @@ public class DrupalRdfPersister implements IRdfPersister {
 
 			model.add(linkedDataModel);
 			logger.info("Data added to model");
+			model.commit();
 			connection.close();
+			if (!model.isClosed()) {
+				model.close();
+			}
+			if (!linkedDataModel.isClosed()) {
+				linkedDataModel.close();
+			}			
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			
 			status = false;
-		} finally {
-			model.close();
-			linkedDataModel.close();
+			logger.info("status = false");
 		}
+		logger.info("Return status = false");
 		return status;
 
 	}
@@ -105,7 +114,7 @@ public class DrupalRdfPersister implements IRdfPersister {
 				if (linkParser.parseContent(content)) {
 					List<ILink> links = linkParser.getReferencedLinks();
 					Resource subject = new ResourceImpl(url);
-					List<Statement> statements = stmtConverter.convert(subject,
+					List<Statement> statements = stmtConverter.convertLinks(subject,
 							links);
 					linkedDataModel.add(statements);
 				}

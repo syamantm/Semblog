@@ -40,10 +40,10 @@ public class PredicateScoreFactor extends AbstractScoreFactor  {
 		}
 		
 		String predicate = rdfRetriever.getPredicate(blog, webpage);
-		logger.info("predicate is : " + predicate);
+	/*	logger.info("predicate is : " + predicate);*/
 		double predicateValue = convertPredicateToValue(predicate);
 		
-		logger.info("Predicate Value = " + predicateValue);
+		//logger.info("Predicate Value = " + predicateValue);
 		
 		return weightage * predicateValue;
 	}

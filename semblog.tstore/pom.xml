@@ -27,6 +27,7 @@
 		<lucene.version>3.3.0</lucene.version>
 		<mahout.version>0.5</mahout.version>
 		<java-version>1.6</java-version>
+		<htmlcleaner-version>2.2</htmlcleaner-version>
 
 	</properties>
 
@@ -142,6 +143,11 @@
 			<artifactId>jaxb-api</artifactId>
 			<version>2.1</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.htmlcleaner</groupId>
+			<artifactId>htmlcleaner</artifactId>
+			<version>${htmlcleaner-version}</version>
 		</dependency>
 	</dependencies>
 	<build>

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.impl.jena.JenaRdfStoreManager1;
+import ac.uk.soton.ecs.sw.semblog.tstore.impl.jena.JenaRdfStoreManager;
 
 
 public class TStoreProcesser {
@@ -13,7 +13,7 @@ public class TStoreProcesser {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"META-INF/appContext.xml");
 		BeanFactory factory = context;
-		JenaRdfStoreManager1 storeMgr = (JenaRdfStoreManager1) factory
+		JenaRdfStoreManager storeMgr = (JenaRdfStoreManager) factory
 				.getBean("jenaRdfStoreManager");
 		storeMgr.run();
 	}

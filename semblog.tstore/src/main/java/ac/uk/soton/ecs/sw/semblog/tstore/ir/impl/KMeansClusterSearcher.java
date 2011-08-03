@@ -67,8 +67,8 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 			for (Vector vec : clusterVectors) {
 				NamedVector named = (NamedVector) vec;
 				double newDistance = measure.distance(center, vec);
-				logger.info("Distance between center and " + named.getName()
-						+ " is  : " + newDistance);
+				/*logger.info("Distance between center and " + named.getName()
+						+ " is  : " + newDistance);*/
 				if (newDistance < SemblogConstants.ACCEPTABLE_DISTANCE) {
 					ILink link = new PageLink(((NamedVector) named).getName());
 					similarPages.add(link);
@@ -96,7 +96,7 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 	}
 
 	private String getClusterId(String url) {
-		logger.info("Reading sequencial file  -  begin");
+		//logger.info("Reading sequencial file  -  begin");
 		String clusterId = null;
 		clusterVectorMap.clear();
 		try {
@@ -112,20 +112,20 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 			while (reader.next(key, value)) {
 				NamedVector namedVector = (NamedVector) value.getVector();
 				clusterId = key.toString();
-				logger.info("Cluster ID : " + clusterId);
-				logger.info("Vector name : " + namedVector.getName());
+				//logger.info("Cluster ID : " + clusterId);
+				//logger.info("Vector name : " + namedVector.getName());
 				if (clusterVectorMap.containsKey(clusterId)) {
 					List<Vector> list = clusterVectorMap.get(clusterId);
 					list.add(namedVector);
-					logger.info("Adding Key : " + clusterId + " value : "
-							+ namedVector.getName());
+					/*logger.info("Adding Key : " + clusterId + " value : "
+							+ namedVector.getName());*/
 
 				} else {
 					List<Vector> list = new ArrayList<Vector>();
 					list.add(namedVector);
 					clusterVectorMap.put(clusterId, list);
-					logger.info("Adding Key : " + clusterId + " value : "
-							+ namedVector.getName());
+					/*logger.info("Adding Key : " + clusterId + " value : "
+							+ namedVector.getName());*/
 				}
 
 				if (namedVector.getName().equals(url)) {
@@ -134,7 +134,7 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 				}
 			}
 			reader.close();
-			logger.info("Reading sequencial file  -  end");
+			/*logger.info("Reading sequencial file  -  end");*/
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -147,7 +147,7 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 		Configuration conf = new Configuration();
 		for (Cluster value : new SequenceFileDirValueIterable<Cluster>(
 				clustersIn, PathType.LIST, PathFilters.logsCRCFilter(), conf)) {
-			logger.info(
+			/*logger.info(
 					"Reading Cluster:{} center:{} numPoints:{} radius:{}",
 					new Object[] {
 							value.getId(),
@@ -155,7 +155,7 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 									null),
 							value.getNumPoints(),
 							AbstractCluster.formatVector(value.getRadius(),
-									null) });
+									null) });*/
 			clusters.add(value);
 		}
 		return clusters;
@@ -172,7 +172,7 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 			for (Cluster value : new SequenceFileDirValueIterable<Cluster>(
 					clustersIn, PathType.LIST, PathFilters.logsCRCFilter(),
 					conf)) {
-				logger.info(
+			/*	logger.info(
 						"Reading Cluster:{} center:{} numPoints:{} radius:{}",
 						new Object[] {
 								value.getId(),
@@ -180,7 +180,7 @@ public class KMeansClusterSearcher implements IClusterSearcher {
 										null),
 								value.getNumPoints(),
 								AbstractCluster.formatVector(value.getRadius(),
-										null) });
+										null) });*/
 
 				if (value.getId() == clusterId) {
 					cluster = value;

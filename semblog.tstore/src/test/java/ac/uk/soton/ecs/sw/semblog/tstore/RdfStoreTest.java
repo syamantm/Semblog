@@ -40,7 +40,7 @@ public class RdfStoreTest {
 	 * status = testJenaRdfStoreManagerQuery(store); assertTrue(status); }
 	 */
 	
-	@Test
+	/*@Test
 	public void test3_fullWorkflow() {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"META-INF/appContext.xml");
@@ -50,8 +50,8 @@ public class RdfStoreTest {
 		boolean status = storeMgr.run();
 		assertTrue(status);
 	}
-
-	/*@Test
+*/
+	@Test
 	public void test4_query() {
 		JenaRdfStore store = new JenaRdfStore();
 		boolean status = testQueryByPredicate(store);
@@ -60,7 +60,7 @@ public class RdfStoreTest {
 		status = testQueryByObject(store);
 		assertTrue(status);
 	}
-	*/
+	
 	
 	
 
@@ -167,7 +167,7 @@ public class RdfStoreTest {
 			// Potentially expensive query.
 			// Potentially expensive query.
 			String sparqlQueryString = "SELECT ?s ?p WHERE { ?s ?p " + "\""
-					+ "http://www.w3.org/2001/sw/Europe/" + "\""
+					+ "http://www.w3.org/2001/sw/Europe/showcase/sem-blog.html" + "\""
 					+ "^^<http://www.w3.org/2001/XMLSchema#anyURI> }";
 
 			// String sparqlQueryString = "SELECT ?s ?o WHERE { ?s ?p ?o }";

@@ -18,33 +18,37 @@ public class DateScoreFactor extends AbstractScoreFactor {
 
 	@Autowired
 	private IRdfRetriever rdfRetriever;
-	
+
 	public DateScoreFactor(double weight) {
-		super(weight);		
+		super(weight);
 	}
-	
+
 	public DateScoreFactor() {
-		super();		
+		super();
 	}
-	
+
 	@Override
 	public double calculateScore(ILink blog, ILink webpage) {
-		if(rdfRetriever == null){
+		if (rdfRetriever == null) {
 			logger.error("rdfRetriever is null!!");
 			rdfRetriever = new JenaRdfRetriever();
 		}
-		
+
 		Date blogDate = rdfRetriever.getCreationDate(blog);
-		java.util.Date today = new java.util.Date();
-		Date sqlToday = new Date(today.getTime());
-		double diff = (sqlToday.getTime() - blogDate.getTime())/86400000 ;
-		
-		logger.info("Date differance = " + diff);
-		
-		//return the inverse of this difference. i.e. 
-		//the longer the time difference smaller the score
-		//avoid "divide by zero"
-		return (diff != 0.0 ? weightage/ diff : weightage);  
+		if (blogDate != null) {
+			java.util.Date today = new java.util.Date();
+			Date sqlToday = new Date(today.getTime());
+			double diff = (sqlToday.getTime() - blogDate.getTime()) / 86400000;
+
+			//logger.info("Date differance = " + diff);
+
+			// return the inverse of this difference. i.e.
+			// the longer the time difference smaller the score
+			// avoid "divide by zero"
+			return (diff != 0.0 ? weightage / diff : weightage);
+		} else {
+			return 0.01;
+		}
 	}
 
 }

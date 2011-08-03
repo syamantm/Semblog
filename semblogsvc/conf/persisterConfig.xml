@@ -9,11 +9,12 @@ CoffeeType -> Caffuccino; Min Price -> makeCoffeeServiceBinding03
 	<rdfPersister>
 		<rdfPersisterBean>drupalRdfPersister</rdfPersisterBean>			
 	</rdfPersister>
+	
+	<rdfPersister>
+		<rdfPersisterBean>simpleHtmlBlogPersister</rdfPersisterBean>			
+	</rdfPersister>
 	<!-- Define other rdf types of rdf persisters -->
 	<!-- 
-	<rdfPersister>
-		<rdfPersisterBean>drupalRdfPersister</rdfPersisterBean>			
-	</rdfPersister>
 	<rdfPersister>
 		<rdfPersisterBean>drupalRdfPersister</rdfPersisterBean>		
 	</rdfPersister>
