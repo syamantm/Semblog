@@ -6,6 +6,12 @@ public interface IRelatedPostsService {
 	
 	public PostInfoBean[] getRelatedPosts(String uri) ;
 	
+	public PostInfoBean[] getRelatedPostsByRank(String uri, 
+			String pageRankWeightage,
+			String dateWeightage,
+			String tagWeightage,
+			String linkWeightage) ;
+	
 	public PostInfoBean getPostInfo(String strUri, Double score) ;
 
 }

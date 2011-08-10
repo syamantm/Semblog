@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.ILinkParser;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfPersister;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfRetriever;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfStore;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IStatementConverter;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.ITerm;
@@ -45,15 +46,19 @@ public class SimpleRdfaBlogPersister extends AbstractRdfPersister {
 			.getLogger(SimpleRdfaBlogPersister.class);
 
 	private HtmlCleaner cleaner = new HtmlCleaner();
-	
-	private final String[] RDFA_ATTRIBUTES = {"rel","rev", "content", "about", "property", "typeof"};
+
+	private final String[] RDFA_ATTRIBUTES = { "rel", "rev", "content",
+			"about", "property", "typeof" };
 
 	@Autowired
 	private IStatementConverter<ILink> stmtConverter;
-	
+
+	@Autowired
+	private IRdfRetriever rdfRetriever;
+
 	private TagNode rootNode;
 	private String rootUrl;
-	
+
 	public boolean persistRdf(String url, IRdfStore rdfStore) {
 		logger.info("Persisting : " + url);
 		boolean status = true;
@@ -71,9 +76,12 @@ public class SimpleRdfaBlogPersister extends AbstractRdfPersister {
 
 			rootNode = cleaner.clean(new URL(rootUrl));
 			harvestLinksFromContent(model);
-			
-			harvestRdfaAttrib(model);
 
+			harvestRdfaAttrib(model);
+			if (!rdfRetriever.isResourceExists(new PageLink(url))) {
+				addNodeUUID(url, model);
+			}
+			
 			logger.info("Data added to model");
 			connection.close();
 		} catch (Exception ex) {
@@ -91,37 +99,38 @@ public class SimpleRdfaBlogPersister extends AbstractRdfPersister {
 	protected void harvestLinksFromContent(Model linkedDataModel)
 			throws MalformedURLException, IOException {
 		logger.info("----- Reading Content Begin ----- ");
-		
+
 		List<ILink> links = new ArrayList<ILink>();
 		TagNode[] tagArray = rootNode.getElementsByName("a", true);
 		logger.info("link count : " + tagArray.length);
 		for (TagNode node : tagArray) {
 			String href = node.getAttributeByName("href");
-			//logger.info("found link : " + href);
+			// logger.info("found link : " + href);
 			if (href.startsWith("http")) {
 				ILink link = new PageLink(href);
 				links.add(link);
 				Resource subject = new ResourceImpl(rootUrl);
-				List<Statement> statements = stmtConverter.convertLinks(subject,
-						links);
+				List<Statement> statements = stmtConverter.convertLinks(
+						subject, links);
 				linkedDataModel.add(statements);
 			}
 		}
 		linkedDataModel.commit();
 		logger.info("----- Reading Content End ----- ");
 	}
-	
-	protected void harvestRdfaAttrib(Model linkedDataModel){
+
+	protected void harvestRdfaAttrib(Model linkedDataModel) {
 		harvestTitle(linkedDataModel);
 		harvestCreatedDate(linkedDataModel);
-		harvestCreator(linkedDataModel);		
+		harvestCreator(linkedDataModel);
 	}
 
 	protected void harvestTitle(Model linkedDataModel) {
-		logger.info("Looking for Title" );
-		List<TagNode> tagList = rootNode.getElementListByAttValue("property", "dc:title", true, true);
-		logger.info("tag count for property dc:title : " + tagList.size() );
-		for(TagNode node : tagList){
+		logger.info("Looking for Title");
+		List<TagNode> tagList = rootNode.getElementListByAttValue("property",
+				"dc:title", true, true);
+		logger.info("tag count for property dc:title : " + tagList.size());
+		for (TagNode node : tagList) {
 			String title = node.getText().toString();
 			logger.info("Title : " + title);
 			Resource subject = new ResourceImpl(rootUrl);
@@ -129,12 +138,13 @@ public class SimpleRdfaBlogPersister extends AbstractRdfPersister {
 			linkedDataModel.add(stmt);
 		}
 	}
-	
+
 	protected void harvestCreatedDate(Model linkedDataModel) {
-		logger.info("Looking for Title" );
-		List<TagNode> tagList = rootNode.getElementListByAttValue("property", "dc:created", true, true);
-		logger.info("tag count for property dc:title : " + tagList.size() );
-		for(TagNode node : tagList){
+		logger.info("Looking for Title");
+		List<TagNode> tagList = rootNode.getElementListByAttValue("property",
+				"dc:created", true, true);
+		logger.info("tag count for property dc:title : " + tagList.size());
+		for (TagNode node : tagList) {
 			String date = node.getText().toString();
 			logger.info("Date : " + date);
 			Resource subject = new ResourceImpl(rootUrl);
@@ -142,12 +152,13 @@ public class SimpleRdfaBlogPersister extends AbstractRdfPersister {
 			linkedDataModel.add(stmt);
 		}
 	}
-	
+
 	protected void harvestCreator(Model linkedDataModel) {
-		logger.info("Looking for Title" );
-		List<TagNode> tagList = rootNode.getElementListByAttValue("property", "dc:creator", true, true);
-		logger.info("tag count for property dc:title : " + tagList.size() );
-		for(TagNode node : tagList){
+		logger.info("Looking for Title");
+		List<TagNode> tagList = rootNode.getElementListByAttValue("property",
+				"dc:creator", true, true);
+		logger.info("tag count for property dc:title : " + tagList.size());
+		for (TagNode node : tagList) {
 			String author = node.getText().toString();
 			logger.info("Creator : " + author);
 			Resource subject = new ResourceImpl(rootUrl);

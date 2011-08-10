@@ -7,8 +7,10 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import ac.uk.soton.ecs.sw.semblog.tstore.common.AppContextManager;
 import ac.uk.soton.ecs.sw.semblog.tstore.impl.jena.JenaRdfStore;
 import ac.uk.soton.ecs.sw.semblog.tstore.impl.jena.JenaRdfStoreManager;
+import ac.uk.soton.ecs.sw.semblog.tstore.pagerank.PageRankInput;
 
 import com.hp.hpl.jena.db.DBConnection;
 import com.hp.hpl.jena.db.ModelRDB;
@@ -40,7 +42,7 @@ public class RdfStoreTest {
 	 * status = testJenaRdfStoreManagerQuery(store); assertTrue(status); }
 	 */
 	
-	/*@Test
+	@Test
 	public void test3_fullWorkflow() {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"META-INF/appContext.xml");
@@ -50,17 +52,26 @@ public class RdfStoreTest {
 		boolean status = storeMgr.run();
 		assertTrue(status);
 	}
-*/
+
 	@Test
 	public void test4_query() {
 		JenaRdfStore store = new JenaRdfStore();
-		boolean status = testQueryByPredicate(store);
+		boolean status = testQueryByPredicate(store, "http://localhost/drupal-7.4/?q=node/3");
 		assertTrue(status);
-
+		status = testQueryByPredicate(store, "http://localhost/drupal-7.4/?q=node/4");
+		assertTrue(status);
 		status = testQueryByObject(store);
 		assertTrue(status);
 	}
 	
+	/*@Test
+	public void test5_createPageRankInput() {
+		PageRankInput prInput = (PageRankInput) AppContextManager.getAppContext()
+				.getBean("pageRankInput");		
+		
+		boolean status = prInput.createPageRankInput();
+		assertTrue(status);
+	}*/
 	
 	
 
@@ -108,7 +119,7 @@ public class RdfStoreTest {
 
 	}
 
-	public static boolean testQueryByPredicate(JenaRdfStore store) {
+	public static boolean testQueryByPredicate(JenaRdfStore store, String url) {
 
 		boolean status = true;
 		DBConnection connection = null;
@@ -123,7 +134,7 @@ public class RdfStoreTest {
 			System.out.println("Model opened db connection : "
 					+ store.getModelName());
 			// Potentially expensive query.
-			String sparqlQueryString = "SELECT   ?o WHERE { <http://localhost/drupal-7.4/?q=node/3> <http://rdfs.org/sioc/ns#links_to> ?o }";
+			String sparqlQueryString = "SELECT   ?o WHERE { <" + url + "> <http://rdfs.org/sioc/ns#links_to> ?o }";
 			// String sparqlQueryString = "SELECT ?s ?o WHERE { ?s ?p ?o }";
 			// See http://www.openjena.org/ARQ/app_api.html
 
@@ -167,7 +178,7 @@ public class RdfStoreTest {
 			// Potentially expensive query.
 			// Potentially expensive query.
 			String sparqlQueryString = "SELECT ?s ?p WHERE { ?s ?p " + "\""
-					+ "http://www.w3.org/2001/sw/Europe/showcase/sem-blog.html" + "\""
+					+ "http://www.w3.org/2001/sw/Europe/" + "\""
 					+ "^^<http://www.w3.org/2001/XMLSchema#anyURI> }";
 
 			// String sparqlQueryString = "SELECT ?s ?o WHERE { ?s ?p ?o }";

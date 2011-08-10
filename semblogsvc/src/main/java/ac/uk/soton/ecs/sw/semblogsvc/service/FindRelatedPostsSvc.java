@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfStore;
 import ac.uk.soton.ecs.sw.semblog.tstore.ranking.AbstractBlogPost;
+import ac.uk.soton.ecs.sw.semblog.tstore.ranking.DefaultScoreCalculator;
 import ac.uk.soton.ecs.sw.semblog.tstore.ranking.SemBlogPost;
 import ac.uk.soton.ecs.sw.semblogsvc.data.PostInfoBean;
 import ac.uk.soton.ecs.sw.semblogsvc.dbl.IDbStore;
@@ -42,10 +43,18 @@ public class FindRelatedPostsSvc implements IRelatedPostsService {
 	@Override
 	public PostInfoBean[] getRelatedPosts(String uri) {
 
+		//set the ranking Weight to default
+		DefaultScoreCalculator.getInstance().restoreDefault();	
+		
+		return retrieveRelatedPosts(uri);
+	}
+
+	private PostInfoBean[] retrieveRelatedPosts(String uri) {
 		QueryExecution qexec = null;
 		List<PostInfoBean> resultInfoList = null;
 		PostInfoBean[] relatedPosts = null;
 		List<AbstractBlogPost> blogPostList = new ArrayList<AbstractBlogPost>();
+		
 		try {
 			initDbModel();
 
@@ -156,6 +165,34 @@ public class FindRelatedPostsSvc implements IRelatedPostsService {
 		logger.info("Found related URI : " + strUri + " With Title : " + title);
 		qexec.close();
 		return bean;
+	}
+
+	@Override
+	public PostInfoBean[] getRelatedPostsByRank(String uri, String pageRankWeight,
+			String dateWeight, String tagWeight, String linkWeight) {
+		if(pageRankWeight != null && 
+				dateWeight != null && 
+				tagWeight != null &&
+				linkWeight != null){
+		logger.info("pageRankWeight : " + pageRankWeight);
+		DefaultScoreCalculator.getInstance().changeWeight(
+				"pageRankFactor", Double.parseDouble(pageRankWeight));
+		
+		logger.info("dateWeight : " + dateWeight);
+		DefaultScoreCalculator.getInstance().changeWeight(
+				"dateScoreFactor", Double.parseDouble(dateWeight));
+		
+		logger.info("tagWeight : " + tagWeight);
+		DefaultScoreCalculator.getInstance().changeWeight(
+				"vectorDistanceScoreFactor", Double.parseDouble(tagWeight));
+		
+		logger.info("linkWeight : " + linkWeight);
+		DefaultScoreCalculator.getInstance().changeWeight(
+				"predicateScoreFactor", Double.parseDouble(linkWeight));		
+		
+		}
+		return retrieveRelatedPosts(uri);	
+		
 	}
 
 }

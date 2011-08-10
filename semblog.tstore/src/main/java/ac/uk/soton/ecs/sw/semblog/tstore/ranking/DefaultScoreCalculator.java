@@ -1,7 +1,6 @@
 package ac.uk.soton.ecs.sw.semblog.tstore.ranking;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -15,9 +14,11 @@ public final class DefaultScoreCalculator implements IScoreCalculator {
 	private static final Logger logger = Logger
 			.getLogger(DefaultScoreCalculator.class);
 
-	List<AbstractScoreFactor> scoreFactorList = new ArrayList<AbstractScoreFactor>();
+	Map<String, AbstractScoreFactor> scoreFactorMap = new HashMap<String, AbstractScoreFactor>();
 
 	private static DefaultScoreCalculator instance = null;
+	
+	private static Map<String, Double> scoreFactorConfig = null; 
 
 	public DefaultScoreCalculator() {
 
@@ -49,39 +50,70 @@ public final class DefaultScoreCalculator implements IScoreCalculator {
 		 * .getInstance().registerScoreFactor(vectorFactor);
 		 */
 		try {
-			Map<String, Double> scoreFactors = JaxbContextLoader
+			scoreFactorConfig = JaxbContextLoader
 					.loadScoreFactors();
-			for (String beanName : scoreFactors.keySet()) {
+			for (String beanName : scoreFactorConfig.keySet()) {
 				
 				AbstractScoreFactor factor = (AbstractScoreFactor) AppContextManager.getAppContext()
 						.getBean(beanName);				
 				if (factor != null) {
 
-					double weightage = scoreFactors.get(beanName);
-					factor.setWeightage(weightage);
-					logger.info("Bean Name : " + beanName + " weightage : "
-							+ weightage);
+					double weight = scoreFactorConfig.get(beanName);
+					factor.setWeight(weight);
+					logger.info("Bean Name : " + beanName + " weight : "
+							+ weight);
 				}
 				DefaultScoreCalculator.getInstance()
-						.registerScoreFactor(factor);
+						.registerScoreFactor(beanName, factor);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
+	
+	
 
 	@Override
-	public void registerScoreFactor(AbstractScoreFactor factor) {
-		scoreFactorList.add(factor);
+	public void registerScoreFactor(String beanName, AbstractScoreFactor factor) {
+		scoreFactorMap.put(beanName, factor);
 	}
 
 	@Override
 	public double calculateScore(ILink blog, ILink webpage) {
 		double score = 0.0;
-		for (AbstractScoreFactor factor : scoreFactorList) {
-			score += factor.calculateScore(blog, webpage);
+		for (String beanName : scoreFactorMap.keySet()) {
+			AbstractScoreFactor factor = scoreFactorMap.get(beanName);
+			double weight = factor.calculateScore(blog, webpage);
+			logger.info("calculateScore Bean Name : " + beanName + " weight : "
+					+ weight);
+			score += weight;
+			
 		}
 		return score;
+	}
+
+	@Override
+	public void changeWeight(String beanName, double weight) {
+		
+		if(scoreFactorMap.containsKey(beanName)){			
+			AbstractScoreFactor factor = scoreFactorMap.get(beanName);
+			logger.info("changeWeight Bean Name : " + beanName + " weight : "
+					+ weight);
+			factor.setWeight(weight);			
+		}
+	}
+
+	@Override
+	public void restoreDefault() {
+		for (String key: scoreFactorMap.keySet()) {
+			AbstractScoreFactor factor = scoreFactorMap.get(key);
+			if(scoreFactorConfig.containsKey(key))
+			{
+				double weight = scoreFactorConfig.get(key);
+				factor.setWeight(weight);	
+			}
+		}
+		
 	}
 
 }

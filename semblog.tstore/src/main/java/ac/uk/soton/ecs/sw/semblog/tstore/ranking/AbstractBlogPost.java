@@ -56,6 +56,7 @@ public abstract class AbstractBlogPost implements Comparable<AbstractBlogPost>{
 		if(score == null){
 			logger.info("getScore()");
 			score = calculateScore();
+			logger.info("getScore() url : " + this.blogUrl.getUrlValue() + " score : " + score);
 		}
 		return score;
 	}

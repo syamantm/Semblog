@@ -40,12 +40,12 @@ public class DateScoreFactor extends AbstractScoreFactor {
 			Date sqlToday = new Date(today.getTime());
 			double diff = (sqlToday.getTime() - blogDate.getTime()) / 86400000;
 
-			//logger.info("Date differance = " + diff);
+			logger.info("Date differance = " + diff + " weight : " + weight);
 
 			// return the inverse of this difference. i.e.
 			// the longer the time difference smaller the score
 			// avoid "divide by zero"
-			return (diff != 0.0 ? weightage / diff : weightage);
+			return (diff != 0.0 ? weight / diff : weight);
 		} else {
 			return 0.01;
 		}

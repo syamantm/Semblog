@@ -8,15 +8,18 @@ CoffeeType -> Caffuccino; Min Price -> makeCoffeeServiceBinding03
 <n1:scoreFactor xsi:schemaLocation="http://jaxb.semblog.sw.ecs.soton.uk.ac/scoreFactor.xsd" xmlns:n1="http://jaxb.semblog.sw.ecs.soton.uk.ac/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<scoreFactor>
 		<scoreFactorBean>dateScoreFactor</scoreFactorBean>		
-		<defaultWeightage>0.4</defaultWeightage>
+		<defaultWeight>0.25</defaultWeight>
 	</scoreFactor>
 	<scoreFactor>
 		<scoreFactorBean>predicateScoreFactor</scoreFactorBean>		
-		<defaultWeightage>0.3</defaultWeightage>
+		<defaultWeight>0.25</defaultWeight>
 	</scoreFactor>
 	<scoreFactor>
 		<scoreFactorBean>vectorDistanceScoreFactor</scoreFactorBean>		
-		<defaultWeightage>0.3</defaultWeightage>
+		<defaultWeight>0.25</defaultWeight>
 	</scoreFactor>
-	
+	<scoreFactor>
+		<scoreFactorBean>pageRankFactor</scoreFactorBean>		
+		<defaultWeight>0.25</defaultWeight>
+	</scoreFactor>
 </n1:scoreFactor>

@@ -17,6 +17,7 @@ import ac.uk.soton.ecs.sw.semblog.tstore.common.PageLink;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IClusterSearcher;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexSearcher;
 import ac.uk.soton.ecs.sw.semblog.tstore.ranking.AbstractBlogPost;
+import ac.uk.soton.ecs.sw.semblog.tstore.ranking.DefaultScoreCalculator;
 import ac.uk.soton.ecs.sw.semblog.tstore.ranking.SemBlogPost;
 import ac.uk.soton.ecs.sw.semblogsvc.data.PostInfoBean;
 
@@ -35,7 +36,15 @@ public class FindSimilarPostsSvc implements ISimilarPostsService {
 	@Override
 	public PostInfoBean[] getSimilarPosts(String webpageUri) {
 
+		//set the ranking Weight to default
+		DefaultScoreCalculator.getInstance().restoreDefault();
+		
+		return retrieveSimilarPosts(webpageUri);
+	}
+
+	private PostInfoBean[] retrieveSimilarPosts(String webpageUri) {
 		PostInfoBean[] similarPosts = null;
+		
 		try {
 
 			logger.info("relatedPostsSvc.getRelatedPosts");			
@@ -101,6 +110,34 @@ public class FindSimilarPostsSvc implements ISimilarPostsService {
 			links.add(link);
 		}
 		return links;
+	}
+
+	@Override
+	public PostInfoBean[] getSimilarPostsByRank(String uri,
+			String pageRankWeight, String dateWeight,
+			String tagWeight, String linkWeight) {
+		if(pageRankWeight != null && 
+				dateWeight != null && 
+				tagWeight != null &&
+				linkWeight != null){
+		logger.info("pageRankWeight : " + pageRankWeight);
+		DefaultScoreCalculator.getInstance().changeWeight(
+				"pageRankFactor", Double.parseDouble(pageRankWeight));
+		
+		logger.info("dateWeight : " + dateWeight);
+		DefaultScoreCalculator.getInstance().changeWeight(
+				"dateScoreFactor", Double.parseDouble(dateWeight));
+		
+		logger.info("tagWeight : " + tagWeight);
+		DefaultScoreCalculator.getInstance().changeWeight(
+				"vectorDistanceScoreFactor", Double.parseDouble(tagWeight));
+		
+		logger.info("linkWeight : " + linkWeight);
+		DefaultScoreCalculator.getInstance().changeWeight(
+				"predicateScoreFactor", Double.parseDouble(linkWeight));		
+		
+		}
+		return retrieveSimilarPosts(uri);	
 	}
 
 }

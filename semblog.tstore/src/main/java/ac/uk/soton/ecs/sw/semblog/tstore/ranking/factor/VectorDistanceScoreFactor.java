@@ -35,12 +35,12 @@ public class VectorDistanceScoreFactor extends AbstractScoreFactor {
 		}
 		double diff = clusterSearcher.getDistanceFromCenter(blog.getUrlValue()) ;
 		
-		//logger.info("Distance From Center = " + diff);
+		logger.info("Distance From Center = " + diff);
 		
 		//return the inverse of this difference. i.e. 
 		//the longer the time difference smaller the score
 		//avoid "divide by zero"
-		return (diff != 0.0 ? weightage/ diff : weightage);
+		return (diff != 0.0 ? weight/ diff : weight);
 	}
 
 }

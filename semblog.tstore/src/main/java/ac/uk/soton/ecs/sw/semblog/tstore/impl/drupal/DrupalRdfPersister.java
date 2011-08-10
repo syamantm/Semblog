@@ -10,10 +10,12 @@ import org.springframework.stereotype.Component;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.ILinkParser;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfPersister;
+import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfRetriever;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfStore;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IStatementConverter;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.ITerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.AbstractRdfPersister;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.PageLink;
 import ac.uk.soton.ecs.sw.semblog.tstore.common.TagTerm;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IDocument;
 import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexCreator;
@@ -46,6 +48,9 @@ public class DrupalRdfPersister extends AbstractRdfPersister {
 
 	@Autowired
 	private IIndexCreator idxCreator;
+	
+	@Autowired
+	private IRdfRetriever rdfRetriever;
 
 	public boolean persistRdf(String url, IRdfStore rdfStore) {
 		logger.info("Persisting : " + url);
@@ -73,6 +78,9 @@ public class DrupalRdfPersister extends AbstractRdfPersister {
 
 			// harvest tags from the blog and index them
 			harvestTags(url, linkedDataModel);
+			if(!rdfRetriever.isResourceExists(new PageLink(url))){
+				addNodeUUID(url, linkedDataModel);
+			}
 
 			model.add(linkedDataModel);
 			logger.info("Data added to model");
@@ -83,7 +91,8 @@ public class DrupalRdfPersister extends AbstractRdfPersister {
 			}
 			if (!linkedDataModel.isClosed()) {
 				linkedDataModel.close();
-			}			
+			}		
+			connection.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			
@@ -188,5 +197,7 @@ public class DrupalRdfPersister extends AbstractRdfPersister {
 		logger.info("----- Index blog End ----- ");
 
 	}
+	
+	
 
 }

@@ -45,9 +45,9 @@ public class JaxbContextLoader {
 					String beanName = score.getScoreFactorBean();
 					logger.info("Bean Name : " + beanName);
 
-					double weightage = score.getDefaultWeightage();
+					double Weight = score.getDefaultWeight();
 
-					scoreFactors.put(beanName, weightage);
+					scoreFactors.put(beanName, Weight);
 				}
 			}
 		} catch (Exception ex) {

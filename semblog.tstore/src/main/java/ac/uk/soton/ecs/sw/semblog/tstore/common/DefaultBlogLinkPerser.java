@@ -30,6 +30,7 @@ public class DefaultBlogLinkPerser implements ILinkParser {
 	}
 
 	public boolean parseContent(String content) {
+		urlList.clear();
 		boolean status = true;
 		ParserDelegator parserDelegator = new ParserDelegator();
 		ParserCallback parserCallback = new ParserCallback() {

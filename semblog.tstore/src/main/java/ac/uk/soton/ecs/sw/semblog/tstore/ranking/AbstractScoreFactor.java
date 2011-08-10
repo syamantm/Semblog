@@ -3,34 +3,35 @@ package ac.uk.soton.ecs.sw.semblog.tstore.ranking;
 import ac.uk.soton.ecs.sw.semblog.tstore.api.ILink;
 
 public abstract class AbstractScoreFactor {
-	
-	protected double weightage;
-	
+
+	protected double weight;
+
 	public abstract double calculateScore(ILink blog, ILink webpage);
-	
+
 	/**
 	 * for Spring only
 	 */
-	public AbstractScoreFactor(){
-		this.weightage = 0.0;
+	public AbstractScoreFactor() {
+		this.weight = 0.0;
 	}
-	
-	public AbstractScoreFactor(double weight){
-		this.weightage = weight;
+
+	public AbstractScoreFactor(double weight) {
+		this.weight = weight;
 	}
 
 	/**
-	 * @return the weightage
+	 * @return the weight
 	 */
-	public double getWeightage() {
-		return weightage;
+	public double getWeight() {
+		return weight;
 	}
 
 	/**
-	 * @param weightage the weightage to set
+	 * @param weight
+	 *            the weight to set
 	 */
-	public void setWeightage(double weightage) {
-		this.weightage = weightage;
+	public void setWeight(double weight) {
+		this.weight = weight;
 	}
 
 }

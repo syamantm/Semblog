@@ -43,9 +43,9 @@ public class PredicateScoreFactor extends AbstractScoreFactor  {
 	/*	logger.info("predicate is : " + predicate);*/
 		double predicateValue = convertPredicateToValue(predicate);
 		
-		//logger.info("Predicate Value = " + predicateValue);
+		logger.info("Predicate Value = " + predicateValue);
 		
-		return weightage * predicateValue;
+		return weight * predicateValue;
 	}
 	
 	protected double convertPredicateToValue(String predicate){

@@ -1,25 +1,23 @@
 package ac.uk.soton.ecs.sw.semblogsvc;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ac.uk.soton.ecs.sw.semblog.tstore.api.ITerm;
-import ac.uk.soton.ecs.sw.semblog.tstore.ir.IIndexSearcher;
 import ac.uk.soton.ecs.sw.semblogsvc.data.PostInfoBean;
 import ac.uk.soton.ecs.sw.semblogsvc.service.ISimilarPostsService;
 
 @Controller
 @RequestMapping("/similarPosts/*")
 public class SimilarPostsController {
+	
+	private static final Logger logger = Logger
+			.getLogger(SimilarPostsController.class);
 
 	@Autowired
 	private ISimilarPostsService similarPostsSvc;
@@ -47,11 +45,45 @@ public class SimilarPostsController {
 
 	@RequestMapping(value = "rest", method = RequestMethod.POST)
 	public @ResponseBody
-	PostInfoBean[] getRelatedPosts(@RequestBody String searchUri) {
+	PostInfoBean[] getSimilarPosts(@RequestBody String searchUri) {
 		System.out.println("SimilarPostsController : similarPosts/rest");
 		PostInfoBean[] results = similarPostsSvc.getSimilarPosts(searchUri);
 		System.out.println("Result length : " + results.length);
 		return results;
 	}
+	
+	@RequestMapping(value = "rankOptions", method = RequestMethod.POST)
+	public @ResponseBody
+	PostInfoBean[] getSimilarPostWithRanks(@RequestBody MultiValueMap<String, String> requestMap) {
+
+		String searchUri = null; 
+		String pageRankWeight = null;
+		String dateWeight = null;
+		String tagWeight = null;
+		String linkWeight = null;
+		
+		logger.info("getRelatedPostWithRanks");
+		if(requestMap.containsKey("searchUrl")){
+			searchUri = requestMap.get("searchUrl").get(0);
+		}
+		if(requestMap.containsKey("pageRankWeight")){
+			pageRankWeight = requestMap.get("pageRankWeight").get(0);
+		}
+		
+		if(requestMap.containsKey("dateWeight")){
+			dateWeight = requestMap.get("dateWeight").get(0);
+		}
+		
+		if(requestMap.containsKey("tagWeight")){
+			tagWeight = requestMap.get("tagWeight").get(0);
+		}
+		if(requestMap.containsKey("linkWeight")){
+			linkWeight = requestMap.get("linkWeight").get(0);
+		}
+		PostInfoBean[] results = similarPostsSvc.getSimilarPostsByRank(searchUri, pageRankWeight, dateWeight, tagWeight, linkWeight);
+
+		return results;
+	}
+
 
 }

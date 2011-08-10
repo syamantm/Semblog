@@ -7,7 +7,7 @@
 			<xsd:element name="scoreFactorBean" type="xsd:string"
 				minOccurs="1" maxOccurs="1" />
 
-			<xsd:element name="defaultWeightage" type="xsd:double"
+			<xsd:element name="defaultWeight" type="xsd:double"
 				minOccurs="1" maxOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
