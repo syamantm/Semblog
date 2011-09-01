@@ -16,4 +16,6 @@ public interface IRdfRetriever {
 	public boolean isResourceExists(ILink link);
 	
 	public String getNodeUUID(ILink link);
+	
+	public String getPostsByAuthor(String author);
 }

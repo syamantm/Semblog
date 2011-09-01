@@ -49,7 +49,7 @@ public class SimpleHtmlBlogPersister extends AbstractRdfPersister {
 	@Autowired
 	private IStatementConverter<ILink> stmtConverter;
 
-	public boolean persistRdf(String url, IRdfStore rdfStore) {
+	public boolean persistRdfImpl(String url, IRdfStore rdfStore) {
 		logger.info("Persisting : " + url);
 		boolean status = true;
 		DBConnection connection = null;

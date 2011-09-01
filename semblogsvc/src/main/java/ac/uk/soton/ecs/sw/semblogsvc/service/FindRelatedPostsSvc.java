@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfStore;
+import ac.uk.soton.ecs.sw.semblog.tstore.common.SemblogConstants;
 import ac.uk.soton.ecs.sw.semblog.tstore.ranking.AbstractBlogPost;
 import ac.uk.soton.ecs.sw.semblog.tstore.ranking.DefaultScoreCalculator;
 import ac.uk.soton.ecs.sw.semblog.tstore.ranking.SemBlogPost;
@@ -33,7 +34,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public class FindRelatedPostsSvc implements IRelatedPostsService {
 
 	private static final Logger logger = Logger
-			.getLogger(FindRelatedPostsSvc.class);
+			.getLogger(FindRelatedPostsSvc.class);	
 
 	@Autowired
 	private IRdfStore rdfStore;
@@ -160,8 +161,31 @@ public class FindRelatedPostsSvc implements IRelatedPostsService {
 
 			}
 		}
+		
+		//author
+		String sparqlAuthorString = "SELECT ?author WHERE { <" + strUri
+				+ "> <http://purl.org/dc/terms/creator> ?author }";
+		Query queryAuthor = QueryFactory.create(sparqlAuthorString);
+		qexec = QueryExecutionFactory.create(queryAuthor, dbModel);
+		String author = SemblogConstants.NO_AUTHOR;
+		logger.info(sparqlAuthorString);
+		ResultSet resultsAuthor = qexec.execSelect();
+		for (; resultsAuthor.hasNext();) {
+			/* System.out.println("Title found"); */
+			QuerySolution solnAuthor = resultsAuthor.nextSolution();
+			// String urlLit = soln.getLiteral("s").getString() ;
+			RDFNode nAuthor = solnAuthor.get("author"); // "s" is a variable in the query
+			// If you need to test the thing returned
+			if (nAuthor.isLiteral()) {
+				author = ((Literal) nAuthor).getLexicalForm();
+
+			}
+		}
+		//
+		
 		PostInfoBean bean = new PostInfoBean(strUri, title);
 		bean.setScore(score.toString());
+		bean.setAuthor(author);
 		logger.info("Found related URI : " + strUri + " With Title : " + title);
 		qexec.close();
 		return bean;

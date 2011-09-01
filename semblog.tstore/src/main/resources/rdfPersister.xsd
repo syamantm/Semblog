@@ -5,7 +5,9 @@
 	<xsd:complexType name="rdfPersisterType">
 		<xsd:sequence>
 			<xsd:element name="rdfPersisterBean" type="xsd:string"
-				minOccurs="1" maxOccurs="1" />			
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="successorBean" type="xsd:string"
+				maxOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
 

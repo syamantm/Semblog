@@ -10,7 +10,7 @@
 	<groupId>ac.uk.soton.ecs.sw</groupId>
 	<artifactId>semblog.tstore</artifactId>
 	<version>1.0.0</version>
-	<packaging>jar</packaging>
+	<packaging>ejb</packaging>
 
 	<name>semblog.tstore</name>
 	<url>http://maven.apache.org</url>
@@ -231,23 +231,16 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.1.1</version>
-				<executions>
-					<execution>
-						<phase>verify</phase>
-						<goals>
-							<goal>java</goal>
-						</goals>
-						<configuration>
-							<mainClass>ac.uk.soton.ecs.sw.semblog.tstore.pagerank.PageRankJob</mainClass>
-							<arguments>
-							</arguments>
-						</configuration>
-					</execution>
-				</executions>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ejb-plugin</artifactId>
+				<configuration>
+					<ejbVersion>3.0</ejbVersion>
+				</configuration>
 			</plugin>
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>exec-maven-plugin</artifactId> 
+				<version>1.1.1</version> <executions> <execution> <phase>verify</phase> <goals> 
+				<goal>java</goal> </goals> <configuration> <mainClass>ac.uk.soton.ecs.sw.semblog.tstore.pagerank.PageRankJob</mainClass> 
+				<arguments> </arguments> </configuration> </execution> </executions> </plugin> -->
 		</plugins>
 	</build>
 </project>

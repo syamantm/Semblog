@@ -9,6 +9,7 @@ public class PostInfoBean {
 	private String relatedUri = null;
 	private String title = null;
 	private String score = null;
+	private String author = null;
 	
 	
 	public PostInfoBean(String uri, String title){
@@ -56,6 +57,14 @@ public class PostInfoBean {
 	 */
 	public void setScore(String score) {
 		this.score = score;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
 }

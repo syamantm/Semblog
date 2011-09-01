@@ -57,8 +57,8 @@ public class JaxbContextLoader {
 		return scoreFactors;
 	}
 	
-	public static List<String> loadRdfpersisters() {
-		List<String> rdfPersisters = new ArrayList<String>();
+	public static Map<String, String> loadRdfpersisters() {
+		Map<String, String> rdfPersisters = new HashMap<String, String>();
 		try {
 			Object rootElement = getRootElement(JAXB_PACKAGE_NAME,
 					PERSISTER_CONFIG_FILE);
@@ -66,9 +66,10 @@ public class JaxbContextLoader {
 				RdfPersister rootRdfPersister = (RdfPersister) rootElement;
 				for (RdfPersisterType rdfPersister : rootRdfPersister.getRdfPersister()) {
 					String beanName = rdfPersister.getRdfPersisterBean();
+					String successor = rdfPersister.getSuccessorBean();
 					logger.info("Bean Name : " + beanName);				
 
-					rdfPersisters.add(beanName);
+					rdfPersisters.put(beanName, successor );
 				}
 			}
 		} catch (Exception ex) {

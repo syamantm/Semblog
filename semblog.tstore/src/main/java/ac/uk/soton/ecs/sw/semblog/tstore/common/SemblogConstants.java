@@ -39,4 +39,6 @@ public class SemblogConstants {
 	public static final String PAGERANK_DIRECTORY = BASE_WORK_DIRECTORY + "/pagerank";
 	public static final String PAGERANK_INPUT_FILE_NAME = PAGERANK_DIRECTORY + "/prInputGraph.txt";
 	public static final String PAGERANK_OUTPUT_FILE_NAME = PAGERANK_DIRECTORY + "/pageRankOutput";
+	
+	public static final String NO_AUTHOR = "anonymous";
 }

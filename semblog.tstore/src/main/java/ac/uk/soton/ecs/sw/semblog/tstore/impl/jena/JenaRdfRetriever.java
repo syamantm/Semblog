@@ -416,4 +416,10 @@ public class JenaRdfRetriever implements IRdfRetriever {
 		return nodeId;
 	}
 
+	@Override
+	public String getPostsByAuthor(String author) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
