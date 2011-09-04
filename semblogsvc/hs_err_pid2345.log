@@ -1,0 +1,611 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGBUS (0x7) at pc=0xb770a036, pid=2345, tid=2380266352
+#
+# JRE version: 6.0_26-b03
+# Java VM: Java HotSpot(TM) Server VM (20.1-b02 mixed mode linux-x86 )
+# Problematic frame:
+# C  [libc.so.6+0x115036]  __float128+0x4a36
+#
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x08486400):  JavaThread "http-8080-1" daemon [_thread_in_native, id=2373, stack(0x8ddaf000,0x8de00000)]
+
+siginfo:si_signo=SIGBUS: si_errno=0, si_code=2 (BUS_ADRERR), si_addr=0x8e65c000
+
+Registers:
+EAX=0x8e65b4d0, EBX=0xb7733f00, ECX=0x000069df, EDX=0x08bba380
+ESP=0x8ddfd184, EBP=0x8ddfd1b8, ESI=0x8e65b497, EDI=0x00000b20
+EIP=0xb770a036, EFLAGS=0x00010202, CR2=0x8e65c000
+
+Top of Stack: (sp=0x8ddfd184)
+0x8ddfd184:   08752eb8 b68e0abc b68dc015 08bba370
+0x8ddfd194:   8e65b4c5 0000752f 8f224974 00006f73
+0x8ddfd1a4:   00002f6b 0000752f b68e0abc 08c6daec
+0x8ddfd1b4:   00000000 8ddfd1e8 b68dc2fb 08c6d590
+0x8ddfd1c4:   08c6daec 00000000 8ddfd1f4 9032bd28
+0x8ddfd1d4:   90c378a0 571c8634 b68e0abc 8ddfd230
+0x8ddfd1e4:   08486520 8ddfd658 b68d30f9 08c6d590
+0x8ddfd1f4:   8ddfd230 00000037 00000037 8ddfd230 
+
+Instructions: (pc=0xb770a036)
+0xb770a016:   0f 6f e3 66 0f 3a 0f da 05 66 0f 3a 0f d1 05 8d
+0xb770a026:   7f 20 66 0f 7f 54 3a e0 66 0f 7f 5c 3a f0 72 30
+0xb770a036:   66 0f 6f 54 38 10 83 e9 20 66 0f 6f 5c 38 20 66
+0xb770a046:   0f 6f cb 66 0f 3a 0f da 05 66 0f 3a 0f d4 05 8d 
+
+Register to memory mapping:
+
+EAX=0x8e65b4d0 is an unknown value
+EBX=0xb7733f00: <offset 0x13ef00> in /lib/i386-linux-gnu/libc.so.6 at 0xb75f5000
+ECX=0x000069df is an unknown value
+EDX=0x08bba380 is an unknown value
+ESP=0x8ddfd184 is pointing into the stack for thread: 0x08486400
+EBP=0x8ddfd1b8 is pointing into the stack for thread: 0x08486400
+ESI=0x8e65b497 is an unknown value
+EDI=0x00000b20 is an unknown value
+
+
+Stack: [0x8ddaf000,0x8de00000],  sp=0x8ddfd184,  free space=312k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [libc.so.6+0x115036]  __float128+0x4a36
+C  [libzip.so+0xc2fb]  ZIP_GetEntry+0x10b
+C  [libzip.so+0x30f9]  Java_java_util_zip_ZipFile_getEntry+0xc9
+J  java.util.zip.ZipFile.getEntry(JLjava/lang/String;Z)J
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+J  java.util.zip.ZipFile.getEntry(JLjava/lang/String;Z)J
+J  java.util.zip.ZipFile.getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
+J  sun.misc.URLClassPath.getResource(Ljava/lang/String;Z)Lsun/misc/Resource;
+j  java.net.URLClassLoader$1.run()Ljava/lang/Object;+26
+v  ~StubRoutines::call_stub
+J  java.security.AccessController.doPrivileged(Ljava/security/PrivilegedExceptionAction;Ljava/security/AccessControlContext;)Ljava/lang/Object;
+J  java.net.URLClassLoader.findClass(Ljava/lang/String;)Ljava/lang/Class;
+j  org.apache.catalina.loader.WebappClassLoader.findClass(Ljava/lang/String;)Ljava/lang/Class;+424
+j  org.apache.catalina.loader.WebappClassLoader.loadClass(Ljava/lang/String;Z)Ljava/lang/Class;+443
+j  org.apache.catalina.loader.WebappClassLoader.loadClass(Ljava/lang/String;)Ljava/lang/Class;+3
+v  ~StubRoutines::call_stub
+j  ac.uk.soton.ecs.sw.semblog.tstore.ranking.AbstractBlogPost.<init>(Ljava/lang/String;Ljava/lang/String;)V+10
+j  ac.uk.soton.ecs.sw.semblog.tstore.ranking.SemBlogPost.<init>(Ljava/lang/String;Ljava/lang/String;)V+3
+j  ac.uk.soton.ecs.sw.semblogsvc.service.FindRelatedPostsSvc.retrieveRelatedPosts(Ljava/lang/String;)[Lac/uk/soton/ecs/sw/semblogsvc/data/PostInfoBean;+218
+j  ac.uk.soton.ecs.sw.semblogsvc.service.FindRelatedPostsSvc.getRelatedPostsByRank(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)[Lac/uk/soton/ecs/sw/semblogsvc/data/PostInfoBean;+168
+j  ac.uk.soton.ecs.sw.semblogsvc.RelatedPostsController.getRelatedPostWithRanks(Lorg/springframework/util/MultiValueMap;)[Lac/uk/soton/ecs/sw/semblogsvc/data/PostInfoBean;+196
+v  ~StubRoutines::call_stub
+j  sun.reflect.NativeMethodAccessorImpl.invoke0(Ljava/lang/reflect/Method;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+0
+j  sun.reflect.NativeMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+87
+j  sun.reflect.DelegatingMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+6
+j  java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+161
+j  org.springframework.web.method.support.InvocableHandlerMethod.invoke([Ljava/lang/Object;)Ljava/lang/Object;+16
+j  org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(Lorg/springframework/web/context/request/NativeWebRequest;Lorg/springframework/web/method/support/ModelAndViewContainer;[Ljava/lang/Object;)Ljava/lang/Object;+78
+j  org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(Lorg/springframework/web/context/request/NativeWebRequest;Lorg/springframework/web/method/support/ModelAndViewContainer;[Ljava/lang/Object;)V+45
+j  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpServletResponse;Lorg/springframework/web/method/HandlerMethod;)Lorg/springframework/web/servlet/ModelAndView;+80
+j  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpServletResponse;Lorg/springframework/web/method/HandlerMethod;)Lorg/springframework/web/servlet/ModelAndView;+85
+j  org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpServletResponse;Ljava/lang/Object;)Lorg/springframework/web/servlet/ModelAndView;+7
+j  org.springframework.web.servlet.DispatcherServlet.doDispatch(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpServletResponse;)V+279
+j  org.springframework.web.servlet.DispatcherServlet.doService(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpServletResponse;)V+231
+j  org.springframework.web.servlet.FrameworkServlet.processRequest(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpServletResponse;)V+111
+j  org.springframework.web.servlet.FrameworkServlet.doPost(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpServletResponse;)V+3
+j  javax.servlet.http.HttpServlet.service(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpServletResponse;)V+139
+j  javax.servlet.http.HttpServlet.service(Ljavax/servlet/ServletRequest;Ljavax/servlet/ServletResponse;)V+30
+j  org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(Ljavax/servlet/ServletRequest;Ljavax/servlet/ServletResponse;)V+376
+j  org.apache.catalina.core.ApplicationFilterChain.doFilter(Ljavax/servlet/ServletRequest;Ljavax/servlet/ServletResponse;)V+101
+j  ac.uk.soton.ecs.sw.semblogsvc.extensions.flash.FlashMapFilter.doFilterInternal(Ljavax/servlet/http/HttpServletRequest;Ljavax/servlet/http/HttpServletResponse;Ljavax/servlet/FilterChain;)V+132
+j  org.springframework.web.filter.OncePerRequestFilter.doFilter(Ljavax/servlet/ServletRequest;Ljavax/servlet/ServletResponse;Ljavax/servlet/FilterChain;)V+90
+j  org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(Ljavax/servlet/ServletRequest;Ljavax/servlet/ServletResponse;)V+119
+j  org.apache.catalina.core.ApplicationFilterChain.doFilter(Ljavax/servlet/ServletRequest;Ljavax/servlet/ServletResponse;)V+101
+j  org.apache.catalina.core.StandardWrapperValve.invoke(Lorg/apache/catalina/connector/Request;Lorg/apache/catalina/connector/Response;)V+804
+j  org.apache.catalina.core.StandardContextValve.invoke(Lorg/apache/catalina/connector/Request;Lorg/apache/catalina/connector/Response;)V+365
+j  org.apache.catalina.core.StandardHostValve.invoke(Lorg/apache/catalina/connector/Request;Lorg/apache/catalina/connector/Response;)V+64
+j  org.apache.catalina.valves.ErrorReportValve.invoke(Lorg/apache/catalina/connector/Request;Lorg/apache/catalina/connector/Response;)V+6
+j  org.apache.catalina.core.StandardEngineValve.invoke(Lorg/apache/catalina/connector/Request;Lorg/apache/catalina/connector/Response;)V+42
+j  org.apache.catalina.connector.CoyoteAdapter.service(Lorg/apache/coyote/Request;Lorg/apache/coyote/Response;)V+158
+j  org.apache.coyote.http11.Http11Processor.process(Ljava/net/Socket;)V+468
+j  org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Ljava/net/Socket;)Z+82
+j  org.apache.tomcat.util.net.JIoEndpoint$Worker.run()V+41
+j  java.lang.Thread.run()V+11
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x088f5c00 JavaThread "PatternStage-1" daemon [_thread_blocked, id=2374, stack(0x8dd5e000,0x8ddaf000)]
+=>0x08486400 JavaThread "http-8080-1" daemon [_thread_in_native, id=2373, stack(0x8ddaf000,0x8de00000)]
+  0x8f43dc00 JavaThread "http-8080-Acceptor-0" daemon [_thread_in_native, id=2372, stack(0x8df2b000,0x8df7c000)]
+  0x8f2e6800 JavaThread "ContainerBackgroundProcessor[StandardEngine[localEngine]]" daemon [_thread_blocked, id=2371, stack(0x8df91000,0x8dfe2000)]
+  0x08d05000 JavaThread "pool-1-thread-3" [_thread_blocked, id=2370, stack(0x8ec0d000,0x8ec5e000)]
+  0x8f1fd800 JavaThread "pool-1-thread-5" [_thread_blocked, id=2369, stack(0x8ec5e000,0x8ecaf000)]
+  0x8f85cc00 JavaThread "pool-1-thread-4" [_thread_blocked, id=2368, stack(0x8ecaf000,0x8ed00000)]
+  0x8f5c9400 JavaThread "pool-1-thread-2" [_thread_blocked, id=2367, stack(0x8f621000,0x8f672000)]
+  0x8eb3a000 JavaThread "pool-1-thread-1" [_thread_blocked, id=2366, stack(0x8f672000,0x8f6c3000)]
+  0x8f804800 JavaThread "Low Memory Detector" daemon [_thread_blocked, id=2359, stack(0x8f918000,0x8f969000)]
+  0x8f802800 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=2358, stack(0x8f77f000,0x8f800000)]
+  0x8f800800 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=2357, stack(0x8f969000,0x8f9ea000)]
+  0x08249c00 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=2356, stack(0x8f9ea000,0x8fa3b000)]
+  0x0823b400 JavaThread "Finalizer" daemon [_thread_blocked, id=2355, stack(0x8fc3b000,0x8fc8c000)]
+  0x08236800 JavaThread "Reference Handler" daemon [_thread_blocked, id=2354, stack(0x8fc8c000,0x8fcdd000)]
+  0x081b7000 JavaThread "main" [_thread_blocked, id=2350, stack(0xb6959000,0xb69aa000)]
+
+Other Threads:
+  0x08232c00 VMThread [stack: 0x8fcdd000,0x8fd5e000] [id=2353]
+  0x8f80e800 WatcherThread [stack: 0x8f6fe000,0x8f77f000] [id=2360]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ PSYoungGen      total 157440K, used 39050K [0xa90c0000, 0xb3810000, 0xb3810000)
+  eden space 147584K, 19% used [0xa90c0000,0xaad4a188,0xb20e0000)
+  from space 9856K, 99% used [0xb20e0000,0xb2a78850,0xb2a80000)
+  to   space 12672K, 0% used [0xb2bb0000,0xb2bb0000,0xb3810000)
+ PSOldGen        total 38080K, used 21379K [0x94210000, 0x96740000, 0xa90c0000)
+  object space 38080K, 56% used [0x94210000,0x956f0fe8,0x96740000)
+ PSPermGen       total 29184K, used 29108K [0x90210000, 0x91e90000, 0x94210000)
+  object space 29184K, 99% used [0x90210000,0x91e7d090,0x91e90000)
+
+Code Cache  [0xb38d0000, 0xb3b10000, 0xb68d0000)
+ total_blobs=758 nmethods=605 adapters=106 free_code_cache=48461184 largest_free_block=64256
+
+Dynamic libraries:
+08048000-08052000 r-xp 00000000 07:00 1327246    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/bin/java
+08052000-08053000 rwxp 00009000 07:00 1327246    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/bin/java
+081b1000-0993a000 rwxp 00000000 00:00 0          [heap]
+8dd5e000-8dd61000 ---p 00000000 00:00 0 
+8dd61000-8ddaf000 rwxp 00000000 00:00 0 
+8ddaf000-8ddb2000 ---p 00000000 00:00 0 
+8ddb2000-8de00000 rwxp 00000000 00:00 0 
+8de00000-8defe000 rwxp 00000000 00:00 0 
+8defe000-8df00000 ---p 00000000 00:00 0 
+8df2b000-8df2e000 ---p 00000000 00:00 0 
+8df2e000-8df7c000 rwxp 00000000 00:00 0 
+8df7c000-8df90000 r-xp 00000000 07:00 1327282    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/libnet.so
+8df90000-8df91000 rwxp 00013000 07:00 1327282    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/libnet.so
+8df91000-8df94000 ---p 00000000 00:00 0 
+8df94000-8dfe2000 rwxp 00000000 00:00 0 
+8dfe2000-8dff1000 r-xs 00667000 07:00 1337023    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/charsets.jar
+8dff1000-8e000000 r-xs 00667000 07:00 1337023    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/charsets.jar
+8e000000-8e0d8000 rwxp 00000000 00:00 0 
+8e0d8000-8e100000 ---p 00000000 00:00 0 
+8e100000-8e1ff000 rwxp 00000000 00:00 0 
+8e1ff000-8e200000 ---p 00000000 00:00 0 
+8e200000-8e2d9000 rwxp 00000000 00:00 0 
+8e2d9000-8e300000 ---p 00000000 00:00 0 
+8e300000-8e3fd000 rwxp 00000000 00:00 0 
+8e3fd000-8e400000 ---p 00000000 00:00 0 
+8e400000-8e4f9000 rwxp 00000000 00:00 0 
+8e4f9000-8e500000 ---p 00000000 00:00 0 
+8e506000-8e50e000 r-xs 00115000 07:00 1327330    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/resources.jar
+8e50e000-8e525000 r-xs 0016d000 07:00 557742     /home/syamantak/.m2/repository/edu/umd/cloud9/1.2.2/cloud9-1.2.2.jar
+8e525000-8e526000 r-xs 00002000 07:00 1331458    /home/syamantak/.m2/repository/org/apache/ant/ant-launcher/1.7.0/ant-launcher-1.7.0.jar
+8e526000-8e539000 r-xs 00128000 07:00 1331457    /home/syamantak/.m2/repository/org/apache/ant/ant/1.7.0/ant-1.7.0.jar
+8e539000-8e53c000 r-xs 00023000 07:00 548670     /home/syamantak/.m2/repository/org/jdom/jdom/1.1/jdom-1.1.jar
+8e53c000-8e53e000 r-xs 00019000 07:00 1331456    /home/syamantak/.m2/repository/net/sourceforge/htmlcleaner/htmlcleaner/2.2/htmlcleaner-2.2.jar
+8e53e000-8e540000 r-xs 0000e000 07:00 555613     /home/syamantak/.m2/repository/javax/activation/activation/1.1/activation-1.1.jar
+8e540000-8e542000 r-xs 00004000 07:00 555612     /home/syamantak/.m2/repository/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar
+8e542000-8e545000 r-xs 00013000 07:00 555889     /home/syamantak/.m2/repository/javax/xml/bind/jaxb-api/2.1/jaxb-api-2.1.jar
+8e545000-8e54b000 r-xs 00057000 07:00 1200687    /home/syamantak/.m2/repository/net/java/dev/jets3t/jets3t/0.7.1/jets3t-0.7.1.jar
+8e54b000-8e54d000 r-xs 00009000 07:00 938487     /home/syamantak/.m2/repository/org/uncommons/watchmaker/watchmaker-swing/0.6.2/watchmaker-swing-0.6.2.jar
+8e54d000-8e564000 r-xs 00114000 07:00 938486     /home/syamantak/.m2/repository/org/apache/lucene/lucene-xercesImpl/3.1.0/lucene-xercesImpl-3.1.0.jar
+8e564000-8e569000 r-xs 00016000 07:00 545767     /home/syamantak/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar
+8e569000-8e56d000 r-xs 0001f000 07:00 938338     /home/syamantak/.m2/repository/commons-digester/commons-digester/1.7/commons-digester-1.7.jar
+8e56d000-8e571000 r-xs 00024000 07:00 938336     /home/syamantak/.m2/repository/org/apache/commons/commons-compress/1.1/commons-compress-1.1.jar
+8e571000-8e576000 r-xs 0002a000 07:00 548707     /home/syamantak/.m2/repository/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar
+8e576000-8e577000 r-xs 00006000 07:00 934305     /home/syamantak/.m2/repository/jakarta-regexp/jakarta-regexp/1.4/jakarta-regexp-1.4.jar
+8e577000-8e579000 r-xs 0000a000 07:00 938332     /home/syamantak/.m2/repository/org/apache/lucene/lucene-queries/3.1.0/lucene-queries-3.1.0.jar
+8e579000-8e57b000 r-xs 00006000 07:00 938334     /home/syamantak/.m2/repository/org/apache/lucene/lucene-memory/3.1.0/lucene-memory-3.1.0.jar
+8e57b000-8e57d000 r-xs 00012000 07:00 938330     /home/syamantak/.m2/repository/org/apache/lucene/lucene-highlighter/3.1.0/lucene-highlighter-3.1.0.jar
+8e57d000-8e582000 r-xs 0003e000 07:00 788784     /home/syamantak/.m2/repository/org/apache/lucene/lucene-benchmark/3.1.0/lucene-benchmark-3.1.0.jar
+8e582000-8e588000 r-xs 00048000 07:00 1200686    /home/syamantak/.m2/repository/org/apache/mahout/mahout-examples/0.5/mahout-examples-0.5.jar
+8e588000-8e589000 r-xs 00001000 07:00 675739     /home/syamantak/.m2/repository/org/slf4j/slf4j-jcl/1.6.0/slf4j-jcl-1.6.0.jar
+8e589000-8e58a000 r-xs 00006000 07:00 788769     /home/syamantak/.m2/repository/org/apache/solr/solr-commons-csv/3.1.0/solr-commons-csv-3.1.0.jar
+8e58a000-8e58d000 r-xs 00023000 07:00 675738     /home/syamantak/.m2/repository/org/apache/mahout/mahout-utils/0.5/mahout-utils-0.5.jar
+8e58d000-8e59b000 r-xs 0007f000 07:00 543584     /home/syamantak/.m2/repository/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar
+8e59b000-8e59e000 r-xs 00014000 07:00 675455     /home/syamantak/.m2/repository/org/apache/mahout/commons/commons-cli/2.0-mahout/commons-cli-2.0-mahout.jar
+8e59e000-8e5a7000 r-xs 00071000 07:00 675454     /home/syamantak/.m2/repository/org/apache/lucene/lucene-analyzers/3.1.0/lucene-analyzers-3.1.0.jar
+8e5a7000-8e5a9000 r-xs 00005000 07:00 659980     /home/syamantak/.m2/repository/xpp3/xpp3_min/1.1.4c/xpp3_min-1.1.4c.jar
+8e5a9000-8e5b4000 r-xs 0005f000 07:00 659984     /home/syamantak/.m2/repository/com/thoughtworks/xstream/xstream/1.3.1/xstream-1.3.1.jar
+8e5b4000-8e5c0000 r-xs 00080000 07:00 675452     /home/syamantak/.m2/repository/com/google/collections/google-collections/1.0-rc2/google-collections-1.0-rc2.jar
+8e5c0000-8e5c3000 r-xs 00010000 07:00 675451     /home/syamantak/.m2/repository/org/uncommons/watchmaker/watchmaker-framework/0.6.2/watchmaker-framework-0.6.2.jar
+8e5c3000-8e5c7000 r-xs 0003c000 07:00 937133     /home/syamantak/.m2/repository/commons-lang/commons-lang/2.4/commons-lang-2.4.jar
+8e5c7000-8e5ca000 r-xs 00013000 07:00 791977     /home/syamantak/.m2/repository/commons-pool/commons-pool/1.4/commons-pool-1.4.jar
+8e5ca000-8e5cc000 r-xs 0001c000 07:00 791973     /home/syamantak/.m2/repository/commons-dbcp/commons-dbcp/1.2.2/commons-dbcp-1.2.2.jar
+8e5cc000-8e5d1000 r-xs 00040000 07:00 937246     /home/syamantak/.m2/repository/commons-httpclient/commons-httpclient/3.0.1/commons-httpclient-3.0.1.jar
+8e5d1000-8e5d3000 r-xs 00009000 07:00 543580     /home/syamantak/.m2/repository/commons-cli/commons-cli/1.2/commons-cli-1.2.jar
+8e5d3000-8e5f8000 r-xs 0026c000 07:00 791969     /home/syamantak/.m2/repository/org/apache/hadoop/hadoop-core/0.20.2/hadoop-core-0.20.2.jar
+8e5f8000-8e611000 r-xs 000f2000 07:00 543513     /home/syamantak/.m2/repository/org/apache/mahout/mahout-collections/1.0/mahout-collections-1.0.jar
+8e611000-8e624000 r-xs 000bd000 07:00 791965     /home/syamantak/.m2/repository/com/google/guava/guava/r03/guava-r03.jar
+8e624000-8e626000 r-xs 0000a000 07:00 791961     /home/syamantak/.m2/repository/org/uncommons/maths/uncommons-maths/1.2/uncommons-maths-1.2.jar
+8e626000-8e637000 r-xs 000bb000 07:00 672370     /home/syamantak/.m2/repository/org/apache/commons/commons-math/2.1/commons-math-2.1.jar
+8e637000-8e63e000 r-xs 0003b000 07:00 672369     /home/syamantak/.m2/repository/org/apache/mahout/mahout-math/0.5/mahout-math-0.5.jar
+8e63e000-8e659000 r-xs 00149000 07:00 672368     /home/syamantak/.m2/repository/org/apache/mahout/mahout-core/0.5/mahout-core-0.5.jar
+8e659000-8e65d000 r-xs 0001a000 07:00 1192414    /home/syamantak/.m2/repository/ac/uk/soton/ecs/sw/semblog.tstore/1.0.0/semblog.tstore-1.0.0.jar
+8e65d000-8e660000 r-xs 00024000 07:00 549729     /home/syamantak/.m2/repository/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar
+8e660000-8e667000 r-xs 000b9000 07:00 937113     /home/syamantak/.m2/repository/mysql/mysql-connector-java/5.1.15/mysql-connector-java-5.1.15.jar
+8e667000-8e669000 r-xs 00006000 07:00 546752     /home/syamantak/.m2/repository/org/eclipse/jetty/jetty-xml/7.2.1.v20101111/jetty-xml-7.2.1.v20101111.jar
+8e669000-8e66b000 r-xs 00015000 07:00 546751     /home/syamantak/.m2/repository/org/eclipse/jetty/jetty-webapp/7.2.1.v20101111/jetty-webapp-7.2.1.v20101111.jar
+8e66b000-8e67a000 r-xs 000ee000 07:00 546750     /home/syamantak/.m2/repository/ant/ant/1.6.5/ant-1.6.5.jar
+8e67a000-8e67e000 r-xs 0001d000 07:00 546749     /home/syamantak/.m2/repository/org/mortbay/jetty/jsp-api-2.1-glassfish/2.1.v20100127/jsp-api-2.1-glassfish-2.1.v20100127.jar
+8e67e000-8e68c000 r-xs 0018b000 07:00 546748     /home/syamantak/.m2/repository/org/eclipse/jdt/core/compiler/ecj/3.5.1/ecj-3.5.1.jar
+8e68c000-8e69d000 r-xs 000ea000 07:00 546747     /home/syamantak/.m2/repository/org/mortbay/jetty/jsp-2.1-glassfish/2.1.v20100127/jsp-2.1-glassfish-2.1.v20100127.jar
+8e69d000-8e69e000 r-xs 00001000 07:00 546746     /home/syamantak/.m2/repository/org/eclipse/jetty/jetty-jsp-2.1/7.2.1.v20101111/jetty-jsp-2.1-7.2.1.v20101111.jar
+8e69e000-8e6a1000 r-xs 00010000 07:00 546745     /home/syamantak/.m2/repository/org/eclipse/jetty/jetty-security/7.2.1.v20101111/jetty-security-7.2.1.v20101111.jar
+8e6a1000-8e6a3000 r-xs 00012000 07:00 546744     /home/syamantak/.m2/repository/org/eclipse/jetty/jetty-servlet/7.2.1.v20101111/jetty-servlet-7.2.1.v20101111.jar
+8e6a3000-8e6a6000 r-xs 0002d000 07:00 546753     /home/syamantak/.m2/repository/org/eclipse/jetty/jetty-util/7.2.1.v20101111/jetty-util-7.2.1.v20101111.jar
+8e6a6000-8e6a8000 r-xs 00011000 07:00 546743     /home/syamantak/.m2/repository/org/eclipse/jetty/jetty-io/7.2.1.v20101111/jetty-io-7.2.1.v20101111.jar
+8e6a8000-8e6ab000 r-xs 00016000 07:00 546742     /home/syamantak/.m2/repository/org/eclipse/jetty/jetty-http/7.2.1.v20101111/jetty-http-7.2.1.v20101111.jar
+8e6ab000-8e6ac000 r-xs 00004000 07:00 546741     /home/syamantak/.m2/repository/org/eclipse/jetty/jetty-continuation/7.2.1.v20101111/jetty-continuation-7.2.1.v20101111.jar
+8e6ac000-8e6b0000 r-xs 00041000 07:00 546739     /home/syamantak/.m2/repository/org/eclipse/jetty/jetty-server/7.2.1.v20101111/jetty-server-7.2.1.v20101111.jar
+8e6b0000-8e6b2000 r-xs 0000d000 07:00 546737     /home/syamantak/.m2/repository/commons-fileupload/commons-fileupload/1.2.2/commons-fileupload-1.2.2.jar
+8e6b2000-8e6b4000 r-xs 0000d000 07:00 546738     /home/syamantak/.m2/repository/commons-codec/commons-codec/1.4/commons-codec-1.4.jar
+8e6b4000-8e6b6000 r-xs 0000d000 07:00 546736     /home/syamantak/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar
+8e6b6000-8e6bb000 r-xs 00026000 07:00 546735     /home/syamantak/.m2/repository/org/apache/httpcomponents/httpcore/4.0.1/httpcore-4.0.1.jar
+8e6bb000-8e6c2000 r-xs 00041000 07:00 546734     /home/syamantak/.m2/repository/org/apache/httpcomponents/httpclient/4.0.3/httpclient-4.0.3.jar
+8e6c2000-8e6c5000 r-xs 0001f000 07:00 546466     /home/syamantak/.m2/repository/org/openjena/fuseki/0.2.0/fuseki-0.2.0.jar
+8e6c5000-8e6dc000 r-xs 0012c000 07:00 554512     /home/syamantak/.m2/repository/org/apache/lucene/lucene-core/3.3.0/lucene-core-3.3.0.jar
+8e6dc000-8e6de000 r-xs 00005000 07:00 546442     /home/syamantak/.m2/repository/stax/stax-api/1.0.1/stax-api-1.0.1.jar
+8e6de000-8e6e4000 r-xs 0007a000 07:00 546441     /home/syamantak/.m2/repository/org/codehaus/woodstox/wstx-asl/3.2.9/wstx-asl-3.2.9.jar
+8e6e4000-8e6fa000 r-xs 00110000 07:00 546447     /home/syamantak/.m2/repository/xerces/xercesImpl/2.7.1/xercesImpl-2.7.1.jar
+8e6fa000-8e713000 r-xs 002fd000 07:00 546446     /home/syamantak/.m2/repository/com/ibm/icu/icu4j/3.4.4/icu4j-3.4.4.jar
+8e713000-8e716000 r-xs 00023000 07:00 546449     /home/syamantak/.m2/repository/com/hp/hpl/jena/iri/0.8/iri-0.8.jar
+8e716000-8e739000 r-xs 001ae000 07:00 546445     /home/syamantak/.m2/repository/com/hp/hpl/jena/jena/2.6.4/jena-2.6.4.jar
+8e739000-8e763000 r-xs 001fb000 07:00 546440     /home/syamantak/.m2/repository/com/hp/hpl/jena/arq/2.8.8/arq-2.8.8.jar
+8e763000-8e76c000 r-xs 00065000 07:00 546439     /home/syamantak/.m2/repository/com/hp/hpl/jena/tdb/0.8.10/tdb-0.8.10.jar
+8e76c000-8e77b000 r-xs 00076000 07:00 798746     /home/syamantak/.m2/repository/joda-time/joda-time/1.6.2/joda-time-1.6.2.jar
+8e77b000-8e782000 r-xs 00040000 07:00 938197     /home/syamantak/.m2/repository/org/hibernate/hibernate-validator/4.1.0.Final/hibernate-validator-4.1.0.Final.jar
+8e782000-8e785000 r-xs 00009000 07:00 934301     /home/syamantak/.m2/repository/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar
+8e785000-8e788000 r-xs 00023000 07:00 548666     /home/syamantak/.m2/repository/jdom/jdom/1.0/jdom-1.0.jar
+8e788000-8e78c000 r-xs 00032000 07:00 798745     /home/syamantak/.m2/repository/net/java/dev/rome/rome/1.0.0/rome-1.0.0.jar
+8e78c000-8e790000 r-xs 00034000 07:00 549728     /home/syamantak/.m2/repository/org/codehaus/jackson/jackson-core-asl/1.8.1/jackson-core-asl-1.8.1.jar
+8e790000-8e79c000 r-xs 00097000 07:00 549726     /home/syamantak/.m2/repository/org/codehaus/jackson/jackson-mapper-asl/1.8.1/jackson-mapper-asl-1.8.1.jar
+8e79c000-8e7a5000 r-xs 00057000 07:00 549725     /home/syamantak/.m2/repository/org/glassfish/web/jstl-impl/1.2/jstl-impl-1.2.jar
+8e7a5000-8e7a7000 r-xs 00006000 07:00 549724     /home/syamantak/.m2/repository/javax/servlet/jsp/jstl/jstl-api/1.2/jstl-api-1.2.jar
+8e7a7000-8e7a8000 r-xs 00000000 07:00 549723     /home/syamantak/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar
+8e7a8000-8e7b1000 r-xs 0006d000 07:00 547418     /home/syamantak/.m2/repository/log4j/log4j/1.2.16/log4j-1.2.16.jar
+8e7b1000-8e7b2000 r-xs 00002000 07:00 549722     /home/syamantak/.m2/repository/org/slf4j/slf4j-log4j12/1.6.1/slf4j-log4j12-1.6.1.jar
+8e7b2000-8e7b4000 r-xs 00003000 07:00 549721     /home/syamantak/.m2/repository/org/slf4j/jcl-over-slf4j/1.6.1/jcl-over-slf4j-1.6.1.jar
+8e7b4000-8e7b6000 r-xs 00005000 07:00 798744     /home/syamantak/.m2/repository/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar
+8e7b6000-8e7c2000 r-xs 0006c000 07:00 798729     /home/syamantak/.m2/repository/org/springframework/spring-web/3.1.0.M2/spring-web-3.1.0.M2.jar
+8e7c2000-8e7c6000 r-xs 00015000 07:00 798728     /home/syamantak/.m2/repository/org/springframework/spring-context-support/3.1.0.M2/spring-context-support-3.1.0.M2.jar
+8e7c6000-8e7d1000 r-xs 00078000 07:00 798727     /home/syamantak/.m2/repository/org/springframework/spring-webmvc/3.1.0.M2/spring-webmvc-3.1.0.M2.jar
+8e7d1000-8e7d6000 r-xs 00027000 07:00 798725     /home/syamantak/.m2/repository/org/springframework/spring-expression/3.1.0.M2/spring-expression-3.1.0.M2.jar
+8e7d6000-8e7e0000 r-xs 0005f000 07:00 798724     /home/syamantak/.m2/repository/org/springframework/spring-core/3.1.0.M2/spring-core-3.1.0.M2.jar
+8e7e0000-8e7ec000 r-xs 00083000 07:00 798723     /home/syamantak/.m2/repository/org/springframework/spring-beans/3.1.0.M2/spring-beans-3.1.0.M2.jar
+8e7ec000-8e7ed000 r-xs 0000c000 07:00 798726     /home/syamantak/.m2/repository/org/springframework/spring-asm/3.1.0.M2/spring-asm-3.1.0.M2.jar
+8e7ed000-8e7ef000 r-xs 00000000 07:00 661334     /home/syamantak/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar
+8e7ef000-8e7f8000 r-xs 00048000 07:00 798722     /home/syamantak/.m2/repository/org/springframework/spring-aop/3.1.0.M2/spring-aop-3.1.0.M2.jar
+8e7f8000-8e80d000 r-xs 000b1000 07:00 798721     /home/syamantak/.m2/repository/org/springframework/spring-context/3.1.0.M2/spring-context-3.1.0.M2.jar
+8e80d000-8e813000 r-xp 00000000 07:00 1327284    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/libmanagement.so
+8e813000-8e814000 rwxp 00005000 07:00 1327284    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/libmanagement.so
+8e814000-8e818000 r-xs 000cb000 07:00 1337015    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/ext/localedata.jar
+8e818000-8e81c000 r-xs 00039000 07:00 550004     /home/syamantak/.m2/repository/org/apache/tomcat/dbcp/6.0.29/dbcp-6.0.29.jar
+8e81c000-8e81f000 r-xs 00018000 07:00 550001     /home/syamantak/.m2/repository/org/apache/tomcat/jasper-el/6.0.29/jasper-el-6.0.29.jar
+8e81f000-8e82b000 r-xs 0014c000 07:00 549998     /home/syamantak/.m2/repository/org/apache/tomcat/jasper-jdt/6.0.29/jasper-jdt-6.0.29.jar
+8e82b000-8e82d000 r-xs 00011000 07:00 549995     /home/syamantak/.m2/repository/org/apache/tomcat/jsp-api/6.0.29/jsp-api-6.0.29.jar
+8e82d000-8e832000 r-xs 00035000 07:00 549986     /home/syamantak/.m2/repository/org/apache/tomcat/tribes/6.0.29/tribes-6.0.29.jar
+8e832000-8e83d000 r-xs 000af000 07:00 549983     /home/syamantak/.m2/repository/org/apache/tomcat/coyote/6.0.29/coyote-6.0.29.jar
+8e83d000-8e89c000 r-xs 00baa000 07:00 15079      /usr/lib/jvm/java-6-sun-1.6.0.26/lib/tools.jar
+8e89c000-8e900000 r-xs 00815000 07:00 938217     /home/syamantak/.m2/repository/org/aspectj/aspectjtools/1.6.10/aspectjtools-1.6.10.jar
+8e900000-8e9fa000 rwxp 00000000 00:00 0 
+8e9fa000-8ea00000 ---p 00000000 00:00 0 
+8ea00000-8eb00000 rwxp 00000000 00:00 0 
+8eb00000-8ebf6000 rwxp 00000000 00:00 0 
+8ebf6000-8ec00000 ---p 00000000 00:00 0 
+8ec00000-8ec08000 r-xs 00079000 07:00 549992     /home/syamantak/.m2/repository/org/apache/tomcat/jasper/6.0.29/jasper-6.0.29.jar
+8ec08000-8ec09000 r-xs 00007000 07:00 549989     /home/syamantak/.m2/repository/org/apache/tomcat/el-api/6.0.29/el-api-6.0.29.jar
+8ec09000-8ec0b000 r-xs 0001e000 07:00 549980     /home/syamantak/.m2/repository/org/apache/tomcat/catalina-ha/6.0.29/catalina-ha-6.0.29.jar
+8ec0b000-8ec0c000 r-xs 00003000 07:00 549977     /home/syamantak/.m2/repository/org/apache/tomcat/annotations-api/6.0.29/annotations-api-6.0.29.jar
+8ec0c000-8ec0d000 r-xs 00006000 07:00 549974     /home/syamantak/.m2/repository/org/apache/tomcat/juli/6.0.29/juli-6.0.29.jar
+8ec0d000-8ec10000 ---p 00000000 00:00 0 
+8ec10000-8ec5e000 rwxp 00000000 00:00 0 
+8ec5e000-8ec61000 ---p 00000000 00:00 0 
+8ec61000-8ecaf000 rwxp 00000000 00:00 0 
+8ecaf000-8ecb2000 ---p 00000000 00:00 0 
+8ecb2000-8ed00000 rwxp 00000000 00:00 0 
+8ed00000-8edf8000 rwxp 00000000 00:00 0 
+8edf8000-8ee00000 ---p 00000000 00:00 0 
+8ee00000-8eef9000 rwxp 00000000 00:00 0 
+8eef9000-8ef00000 ---p 00000000 00:00 0 
+8ef00000-8eff1000 rwxp 00000000 00:00 0 
+8eff1000-8f000000 ---p 00000000 00:00 0 
+8f000000-8f0f2000 rwxp 00000000 00:00 0 
+8f0f2000-8f100000 ---p 00000000 00:00 0 
+8f100000-8f1fe000 rwxp 00000000 00:00 0 
+8f1fe000-8f200000 ---p 00000000 00:00 0 
+8f200000-8f2fd000 rwxp 00000000 00:00 0 
+8f2fd000-8f300000 ---p 00000000 00:00 0 
+8f300000-8f3fa000 rwxp 00000000 00:00 0 
+8f3fa000-8f400000 ---p 00000000 00:00 0 
+8f400000-8f4fa000 rwxp 00000000 00:00 0 
+8f4fa000-8f500000 ---p 00000000 00:00 0 
+8f500000-8f5fc000 rwxp 00000000 00:00 0 
+8f5fc000-8f600000 ---p 00000000 00:00 0 
+8f600000-8f602000 r-xs 00014000 07:00 549968     /home/syamantak/.m2/repository/org/apache/tomcat/servlet-api/6.0.29/servlet-api-6.0.29.jar
+8f602000-8f611000 r-xs 00114000 07:00 549956     /home/syamantak/.m2/repository/org/apache/tomcat/catalina/6.0.29/catalina-6.0.29.jar
+8f611000-8f613000 r-xs 0000a000 07:00 549969     /home/syamantak/.m2/repository/org/codehaus/plexus/plexus-classworlds/2.2.2/plexus-classworlds-2.2.2.jar
+8f613000-8f615000 r-xs 0000a000 07:00 549957     /home/syamantak/.m2/repository/commons-codec/commons-codec/1.3/commons-codec-1.3.jar
+8f615000-8f618000 r-xs 00020000 07:00 549959     /home/syamantak/.m2/repository/org/codehaus/plexus/plexus-archiver/1.0-alpha-7/plexus-archiver-1.0-alpha-7.jar
+8f618000-8f619000 r-xs 00002000 07:00 549958     /home/syamantak/.m2/repository/org/apache/maven/maven-archiver/2.2/maven-archiver-2.2.jar
+8f619000-8f61b000 r-xs 00026000 07:00 547845     /home/syamantak/.m2/repository/org/codehaus/plexus/plexus-utils/1.0.4/plexus-utils-1.0.4.jar
+8f61b000-8f61d000 r-xs 00002000 07:00 546198     /home/syamantak/.m2/repository/org/codehaus/plexus/plexus-compiler-javac/1.8.1/plexus-compiler-javac-1.8.1.jar
+8f61d000-8f621000 r-xs 00033000 07:00 546195     /home/syamantak/.m2/repository/org/codehaus/plexus/plexus-utils/2.0.5/plexus-utils-2.0.5.jar
+8f621000-8f624000 ---p 00000000 00:00 0 
+8f624000-8f672000 rwxp 00000000 00:00 0 
+8f672000-8f675000 ---p 00000000 00:00 0 
+8f675000-8f6c3000 rwxp 00000000 00:00 0 
+8f6c3000-8f6fe000 r-xs 002c7000 07:00 663657     /home/syamantak/apache-maven-2.2.1/lib/maven-2.2.1-uber.jar
+8f6fe000-8f6ff000 ---p 00000000 00:00 0 
+8f6ff000-8f77f000 rwxp 00000000 00:00 0 
+8f77f000-8f782000 ---p 00000000 00:00 0 
+8f782000-8f800000 rwxp 00000000 00:00 0 
+8f800000-8f8fc000 rwxp 00000000 00:00 0 
+8f8fc000-8f900000 ---p 00000000 00:00 0 
+8f900000-8f902000 r-xs 00000000 07:00 546197     /home/syamantak/.m2/repository/org/codehaus/plexus/plexus-compiler-manager/1.8.1/plexus-compiler-manager-1.8.1.jar
+8f902000-8f903000 r-xs 00004000 07:00 546196     /home/syamantak/.m2/repository/org/codehaus/plexus/plexus-compiler-api/1.8.1/plexus-compiler-api-1.8.1.jar
+8f903000-8f905000 r-xs 0000b000 07:00 547792     /home/syamantak/.m2/repository/org/codehaus/plexus/plexus-interpolation/1.6/plexus-interpolation-1.6.jar
+8f905000-8f907000 r-xs 00007000 07:00 547791     /home/syamantak/.m2/repository/org/apache/maven/shared/maven-filtering/1.0-beta-2/maven-filtering-1.0-beta-2.jar
+8f907000-8f90e000 r-xs 00039000 07:00 938218     /home/syamantak/.m2/repository/doxia/doxia-core/1.0-alpha-4/doxia-core-1.0-alpha-4.jar
+8f90e000-8f910000 r-xs 0000e000 07:00 549819     /home/syamantak/.m2/repository/oro/oro/2.0.7/oro-2.0.7.jar
+8f910000-8f912000 r-xs 00013000 07:00 549818     /home/syamantak/.m2/repository/commons-validator/commons-validator/1.1.4/commons-validator-1.1.4.jar
+8f912000-8f913000 r-xs 00003000 07:00 549817     /home/syamantak/.m2/repository/org/apache/maven/reporting/maven-reporting-impl/2.0/maven-reporting-impl-2.0.jar
+8f913000-8f918000 r-xs 00039000 07:00 547356     /home/syamantak/.m2/repository/org/codehaus/plexus/plexus-utils/1.5.6/plexus-utils-1.5.6.jar
+8f918000-8f91b000 ---p 00000000 00:00 0 
+8f91b000-8f969000 rwxp 00000000 00:00 0 
+8f969000-8f96c000 ---p 00000000 00:00 0 
+8f96c000-8f9ea000 rwxp 00000000 00:00 0 
+8f9ea000-8f9ed000 ---p 00000000 00:00 0 
+8f9ed000-8fa3b000 rwxp 00000000 00:00 0 
+8fa3b000-8fc3b000 r-xp 00000000 07:00 1316634    /usr/lib/locale/locale-archive
+8fc3b000-8fc3e000 ---p 00000000 00:00 0 
+8fc3e000-8fc8c000 rwxp 00000000 00:00 0 
+8fc8c000-8fc8f000 ---p 00000000 00:00 0 
+8fc8f000-8fcdd000 rwxp 00000000 00:00 0 
+8fcdd000-8fcde000 ---p 00000000 00:00 0 
+8fcde000-8fd92000 rwxp 00000000 00:00 0 
+8fd92000-8ff2a000 r-xs 03029000 07:00 1327713    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/rt.jar
+8ff2a000-8ff2b000 ---p 00000000 00:00 0 
+8ff2b000-8ffab000 rwxp 00000000 00:00 0 
+8ffab000-8ffac000 ---p 00000000 00:00 0 
+8ffac000-9003b000 rwxp 00000000 00:00 0 
+9003b000-9004c000 rwxp 00000000 00:00 0 
+9004c000-9005f000 rwxp 00000000 00:00 0 
+9005f000-900f4000 rwxp 00000000 00:00 0 
+900f4000-90103000 rwxp 00000000 00:00 0 
+90103000-90114000 rwxp 00000000 00:00 0 
+90114000-90127000 rwxp 00000000 00:00 0 
+90127000-901bb000 rwxp 00000000 00:00 0 
+901bb000-9020f000 rwxp 00000000 00:00 0 
+9020f000-91e90000 rwxp 00000000 00:00 0 
+91e90000-94210000 rwxp 00000000 00:00 0 
+94210000-96740000 rwxp 00000000 00:00 0 
+96740000-a90c0000 rwxp 00000000 00:00 0 
+a90c0000-b3810000 rwxp 00000000 00:00 0 
+b3810000-b3819000 rwxp 00000000 00:00 0 
+b3819000-b38d0000 rwxp 00000000 00:00 0 
+b38d0000-b3b10000 rwxp 00000000 00:00 0 
+b3b10000-b68d0000 rwxp 00000000 00:00 0 
+b68d0000-b68df000 r-xp 00000000 07:00 1327278    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/libzip.so
+b68df000-b68e1000 rwxp 0000e000 07:00 1327278    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/libzip.so
+b68e1000-b68eb000 r-xp 00000000 07:00 1439855    /lib/i386-linux-gnu/libnss_files-2.13.so
+b68eb000-b68ec000 r-xp 00009000 07:00 1439855    /lib/i386-linux-gnu/libnss_files-2.13.so
+b68ec000-b68ed000 rwxp 0000a000 07:00 1439855    /lib/i386-linux-gnu/libnss_files-2.13.so
+b68ed000-b68f6000 r-xp 00000000 07:00 1439859    /lib/i386-linux-gnu/libnss_nis-2.13.so
+b68f6000-b68f7000 r-xp 00008000 07:00 1439859    /lib/i386-linux-gnu/libnss_nis-2.13.so
+b68f7000-b68f8000 rwxp 00009000 07:00 1439859    /lib/i386-linux-gnu/libnss_nis-2.13.so
+b68f8000-b68fe000 r-xp 00000000 07:00 1439851    /lib/i386-linux-gnu/libnss_compat-2.13.so
+b68fe000-b68ff000 r-xp 00005000 07:00 1439851    /lib/i386-linux-gnu/libnss_compat-2.13.so
+b68ff000-b6900000 rwxp 00006000 07:00 1439851    /lib/i386-linux-gnu/libnss_compat-2.13.so
+b6900000-b6913000 r-xp 00000000 07:00 1439849    /lib/i386-linux-gnu/libnsl-2.13.so
+b6913000-b6914000 r-xp 00012000 07:00 1439849    /lib/i386-linux-gnu/libnsl-2.13.so
+b6914000-b6915000 rwxp 00013000 07:00 1439849    /lib/i386-linux-gnu/libnsl-2.13.so
+b6915000-b6917000 rwxp 00000000 00:00 0 
+b6917000-b691b000 r-xs 00019000 07:00 798743     /home/syamantak/.m2/repository/org/aspectj/aspectjrt/1.6.10/aspectjrt-1.6.10.jar
+b691b000-b691d000 r-xs 00004000 07:00 547470     /home/syamantak/.m2/repository/org/apache/maven/plugins/maven-resources-plugin/2.3/maven-resources-plugin-2.3.jar
+b691d000-b691f000 r-xs 0000d000 07:00 549792     /home/syamantak/.m2/repository/org/codehaus/mojo/tomcat-maven-plugin/1.1/tomcat-maven-plugin-1.1.jar
+b691f000-b6921000 r-xs 00008000 07:00 549607     /home/syamantak/.m2/repository/org/codehaus/mojo/aspectj-maven-plugin/1.2/aspectj-maven-plugin-1.2.jar
+b6921000-b6923000 r-xs 00014000 07:00 549784     /home/syamantak/.m2/repository/org/apache/maven/plugins/maven-dependency-plugin/2.0/maven-dependency-plugin-2.0.jar
+b6923000-b692b000 rwxs 00000000 07:00 1191579    /tmp/hsperfdata_syamantak/2345
+b692b000-b694e000 r-xp 00000000 07:00 1327275    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/libjava.so
+b694e000-b6950000 rwxp 00023000 07:00 1327275    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/libjava.so
+b6950000-b6957000 r-xp 00000000 07:00 1439878    /lib/i386-linux-gnu/librt-2.13.so
+b6957000-b6958000 r-xp 00006000 07:00 1439878    /lib/i386-linux-gnu/librt-2.13.so
+b6958000-b6959000 rwxp 00007000 07:00 1439878    /lib/i386-linux-gnu/librt-2.13.so
+b6959000-b695c000 ---p 00000000 00:00 0 
+b695c000-b69aa000 rwxp 00000000 00:00 0 
+b69aa000-b69ce000 r-xp 00000000 07:00 1439846    /lib/i386-linux-gnu/libm-2.13.so
+b69ce000-b69cf000 r-xp 00023000 07:00 1439846    /lib/i386-linux-gnu/libm-2.13.so
+b69cf000-b69d0000 rwxp 00024000 07:00 1439846    /lib/i386-linux-gnu/libm-2.13.so
+b69d0000-b7182000 r-xp 00000000 07:00 1327263    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/server/libjvm.so
+b7182000-b71d6000 rwxp 007b1000 07:00 1327263    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/server/libjvm.so
+b71d6000-b75f5000 rwxp 00000000 00:00 0 
+b75f5000-b774f000 r-xp 00000000 07:00 1439809    /lib/i386-linux-gnu/libc-2.13.so
+b774f000-b7750000 ---p 0015a000 07:00 1439809    /lib/i386-linux-gnu/libc-2.13.so
+b7750000-b7752000 r-xp 0015a000 07:00 1439809    /lib/i386-linux-gnu/libc-2.13.so
+b7752000-b7753000 rwxp 0015c000 07:00 1439809    /lib/i386-linux-gnu/libc-2.13.so
+b7753000-b7756000 rwxp 00000000 00:00 0 
+b7756000-b7758000 r-xp 00000000 07:00 1439819    /lib/i386-linux-gnu/libdl-2.13.so
+b7758000-b7759000 r-xp 00001000 07:00 1439819    /lib/i386-linux-gnu/libdl-2.13.so
+b7759000-b775a000 rwxp 00002000 07:00 1439819    /lib/i386-linux-gnu/libdl-2.13.so
+b775a000-b7761000 r-xp 00000000 07:00 1327277    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/jli/libjli.so
+b7761000-b7763000 rwxp 00006000 07:00 1327277    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/jli/libjli.so
+b7763000-b7764000 rwxp 00000000 00:00 0 
+b7764000-b7779000 r-xp 00000000 07:00 1439874    /lib/i386-linux-gnu/libpthread-2.13.so
+b7779000-b777a000 r-xp 00015000 07:00 1439874    /lib/i386-linux-gnu/libpthread-2.13.so
+b777a000-b777b000 rwxp 00016000 07:00 1439874    /lib/i386-linux-gnu/libpthread-2.13.so
+b777b000-b777d000 rwxp 00000000 00:00 0 
+b777d000-b777f000 r-xs 00006000 07:00 545957     /home/syamantak/.m2/repository/org/apache/maven/plugins/maven-compiler-plugin/2.3.2/maven-compiler-plugin-2.3.2.jar
+b777f000-b7780000 r-xp 00000000 00:00 0 
+b7780000-b7782000 r-xs 00008000 07:00 663662     /home/syamantak/apache-maven-2.2.1/boot/classworlds-1.1.jar
+b7782000-b7783000 r-xp 00299000 07:00 1316634    /usr/lib/locale/locale-archive
+b7783000-b7784000 rwxp 00000000 00:00 0 
+b7784000-b7785000 r-xp 00000000 00:00 0 
+b7785000-b7790000 r-xp 00000000 07:00 1327274    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/libverify.so
+b7790000-b7791000 rwxp 0000b000 07:00 1327274    /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/libverify.so
+b7791000-b7793000 rwxp 00000000 00:00 0 
+b7793000-b7794000 r-xp 00000000 00:00 0          [vdso]
+b7794000-b77b0000 r-xp 00000000 07:00 1439796    /lib/i386-linux-gnu/ld-2.13.so
+b77b0000-b77b1000 r-xp 0001b000 07:00 1439796    /lib/i386-linux-gnu/ld-2.13.so
+b77b1000-b77b2000 rwxp 0001c000 07:00 1439796    /lib/i386-linux-gnu/ld-2.13.so
+bfa83000-bfaa5000 rwxp 00000000 00:00 0          [stack]
+
+VM Arguments:
+jvm_args: -Dclassworlds.conf=/home/syamantak/apache-maven-2.2.1/bin/m2.conf -Dmaven.home=/home/syamantak/apache-maven-2.2.1 
+java_command: org.codehaus.classworlds.Launcher "tomcat:run" "-Dlog4j.configuration=file:log4j.xml"
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=/usr/lib/jvm/java-6-sun
+PATH=/usr/lib/jvm/java-6-sun/bin:/home/syamantak/apache-maven-2.2.1/bin:/home/syamantak/apache-ant-1.8.2/bin:/home/syamantak/.rvm/gems/ruby-1.9.2-p180/bin:/home/syamantak/.rvm/gems/ruby-1.9.2-p180@global/bin:/home/syamantak/.rvm/rubies/ruby-1.9.2-p180/bin:/home/syamantak/.rvm/bin:/home/syamantak/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+USERNAME=syamantak
+LD_LIBRARY_PATH=/usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386/server:/usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/i386:/usr/lib/jvm/java-6-sun-1.6.0.26/jre/../lib/i386
+SHELL=/bin/bash
+DISPLAY=:0
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0x725510], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGBUS: [libjvm.so+0x725510], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGFPE: [libjvm.so+0x5dff20], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGPIPE: [libjvm.so+0x5dff20], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGXFSZ: [libjvm.so+0x5dff20], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGILL: [libjvm.so+0x5dff20], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGUSR1: SIG_DFL, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGUSR2: [libjvm.so+0x5e3160], sa_mask[0]=0x00000000, sa_flags=0x10000004
+SIGHUP: [libjvm.so+0x5e2d40], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGINT: [libjvm.so+0x5e2d40], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGTERM: [libjvm.so+0x5e2d40], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGQUIT: [libjvm.so+0x5e2d40], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+
+
+---------------  S Y S T E M  ---------------
+
+OS:squeeze/sid
+
+uname:Linux 2.6.38-10-generic #46-Ubuntu SMP Tue Jun 28 15:05:41 UTC 2011 i686
+libc:glibc 2.13 NPTL 2.13 
+rlimit: STACK 8192k, CORE 0k, NPROC infinity, NOFILE 4096, AS infinity
+load average:2.64 1.44 0.93
+
+/proc/meminfo:
+MemTotal:        2050904 kB
+MemFree:           62720 kB
+Buffers:          263176 kB
+Cached:           504432 kB
+SwapCached:         8552 kB
+Active:           842656 kB
+Inactive:        1074744 kB
+Active(anon):     766180 kB
+Inactive(anon):   591836 kB
+Active(file):      76476 kB
+Inactive(file):   482908 kB
+Unevictable:        2196 kB
+Mlocked:              24 kB
+HighTotal:       1178184 kB
+HighFree:          21404 kB
+LowTotal:         872720 kB
+LowFree:           41316 kB
+SwapTotal:        262136 kB
+SwapFree:         124908 kB
+Dirty:              1596 kB
+Writeback:             0 kB
+AnonPages:       1144292 kB
+Mapped:            51632 kB
+Shmem:            205960 kB
+Slab:              33000 kB
+SReclaimable:      18060 kB
+SUnreclaim:        14940 kB
+KernelStack:        3464 kB
+PageTables:         8704 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:     1287588 kB
+Committed_AS:    3462952 kB
+VmallocTotal:     122880 kB
+VmallocUsed:       23748 kB
+VmallocChunk:      73248 kB
+HardwareCorrupted:     0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       4096 kB
+DirectMap4k:       24568 kB
+DirectMap4M:      884736 kB
+
+
+CPU:total 2 (2 cores per cpu, 1 threads per core) family 6 model 15 stepping 6, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3
+
+/proc/cpuinfo:
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 15
+model name	: Intel(R) Core(TM)2 CPU         T5600  @ 1.83GHz
+stepping	: 6
+cpu MHz		: 1833.000
+cache size	: 2048 KB
+physical id	: 0
+siblings	: 2
+core id		: 0
+cpu cores	: 2
+apicid		: 0
+initial apicid	: 0
+fdiv_bug	: no
+hlt_bug		: no
+f00f_bug	: no
+coma_bug	: no
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 10
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe nx lm constant_tsc arch_perfmon pebs bts aperfmperf pni dtes64 monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr pdcm lahf_lm dts tpr_shadow
+bogomips	: 3657.75
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+processor	: 1
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 15
+model name	: Intel(R) Core(TM)2 CPU         T5600  @ 1.83GHz
+stepping	: 6
+cpu MHz		: 1833.000
+cache size	: 2048 KB
+physical id	: 0
+siblings	: 2
+core id		: 1
+cpu cores	: 2
+apicid		: 1
+initial apicid	: 1
+fdiv_bug	: no
+hlt_bug		: no
+f00f_bug	: no
+coma_bug	: no
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 10
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe nx lm constant_tsc arch_perfmon pebs bts aperfmperf pni dtes64 monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr pdcm lahf_lm dts tpr_shadow
+bogomips	: 3657.80
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+
+
+Memory: 4k page, physical 2050904k(62720k free), swap 262136k(124908k free)
+
+vm_info: Java HotSpot(TM) Server VM (20.1-b02) for linux-x86 JRE (1.6.0_26-b03), built on May  4 2011 01:04:10 by "java_re" with gcc 3.2.1-7a (J2SE release)
+
+time: Sun Sep  4 22:35:03 2011
+elapsed time: 1881 seconds
+

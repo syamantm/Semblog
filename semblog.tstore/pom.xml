@@ -220,7 +220,7 @@
 						<index>true</index>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>ac.uk.soton.ecs.sw.semblog.tstore.pagerank.PageRankJob</mainClass>
+							<mainClass>ac.uk.soton.ecs.sw.semblog.tstore.TStoreProcesser</mainClass>
 						</manifest>
 						<manifestEntries>
 							<mode>development</mode>
@@ -237,10 +237,24 @@
 					<ejbVersion>3.0</ejbVersion>
 				</configuration>
 			</plugin>
-			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>exec-maven-plugin</artifactId> 
-				<version>1.1.1</version> <executions> <execution> <phase>verify</phase> <goals> 
-				<goal>java</goal> </goals> <configuration> <mainClass>ac.uk.soton.ecs.sw.semblog.tstore.pagerank.PageRankJob</mainClass> 
-				<arguments> </arguments> </configuration> </execution> </executions> </plugin> -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.1.1</version>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>ac.uk.soton.ecs.sw.semblog.tstore.TStoreProcesser</mainClass>
+							<arguments>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>

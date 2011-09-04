@@ -25,14 +25,14 @@ public class JaxbContextLoader {
 	private static Map<String, JAXBContext> contextInstances = new HashMap<String, JAXBContext>();
 
 	private final static String CONFIG_PATH = "conf";
-	
-	private final static String JAXB_PACKAGE_NAME = "ac.uk.soton.ecs.sw.semblog.jaxb";
-	
-	private final static String SCORE_CONFIG_FILE = "scoreFactorConfig.xml";
-	
-	private final static String PERSISTER_CONFIG_FILE = "persisterConfig.xml";
-	
 
+	private final static String JAXB_PACKAGE_NAME = "ac.uk.soton.ecs.sw.semblog.jaxb";
+
+	private final static String SCORE_CONFIG_FILE = "scoreFactorConfig.xml";
+
+	private final static String PERSISTER_CONFIG_FILE = "persisterConfig.xml";
+
+	private static List<String> rdfPersisters = null;
 
 	public static Map<String, Double> loadScoreFactors() {
 		Map<String, Double> scoreFactors = new HashMap<String, Double>();
@@ -56,26 +56,27 @@ public class JaxbContextLoader {
 
 		return scoreFactors;
 	}
-	
-	public static Map<String, String> loadRdfpersisters() {
-		Map<String, String> rdfPersisters = new HashMap<String, String>();
-		try {
-			Object rootElement = getRootElement(JAXB_PACKAGE_NAME,
-					PERSISTER_CONFIG_FILE);
-			if (rootElement instanceof RdfPersister) {
-				RdfPersister rootRdfPersister = (RdfPersister) rootElement;
-				for (RdfPersisterType rdfPersister : rootRdfPersister.getRdfPersister()) {
-					String beanName = rdfPersister.getRdfPersisterBean();
-					String successor = rdfPersister.getSuccessorBean();
-					logger.info("Bean Name : " + beanName);				
 
-					rdfPersisters.put(beanName, successor );
+	public static List<String> loadRdfpersisters() {
+		if (rdfPersisters == null) {
+			rdfPersisters = new ArrayList<String>();
+			try {
+				Object rootElement = getRootElement(JAXB_PACKAGE_NAME,
+						PERSISTER_CONFIG_FILE);
+				if (rootElement instanceof RdfPersister) {
+					RdfPersister rootRdfPersister = (RdfPersister) rootElement;
+					for (RdfPersisterType rdfPersister : rootRdfPersister
+							.getRdfPersister()) {
+						String beanName = rdfPersister.getRdfPersisterBean();
+						logger.info("Bean Name : " + beanName);
+
+						rdfPersisters.add(beanName);
+					}
 				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
-
 		return rdfPersisters;
 	}
 

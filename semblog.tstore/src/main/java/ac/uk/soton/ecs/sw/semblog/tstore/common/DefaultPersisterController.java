@@ -16,38 +16,29 @@ public class DefaultPersisterController implements IRdfPersisterController {
 
 	private static final Logger logger = Logger
 			.getLogger(DrupalRdfPersister.class);
-	
+
 	/**
-	 * bind the persistence handlers together and then invoke the
-	 * chain of responsibility.
+	 * bind the persistence handlers together and then invoke the chain of
+	 * responsibility.
 	 */
 	@Override
 	public boolean persistRdf(String url, IRdfStore rdfStore) {
 		boolean status = true;
-		Map<String, String> rdfPersisterBeans = JaxbContextLoader.loadRdfpersisters();
+		List<String> rdfPersisterBeans = JaxbContextLoader.loadRdfpersisters();
 		logger.info("number of persisters : " + rdfPersisterBeans.size());
-		boolean first = false;
-		AbstractRdfPersister firstPersister = null;
-		for(String beanName : rdfPersisterBeans.keySet()){
+		for (String beanName : rdfPersisterBeans) {
 			logger.info("Calling persister : " + beanName);
-			AbstractRdfPersister persister = (AbstractRdfPersister) AppContextManager.getAppContext()
-					.getBean(beanName);		
-			String successor = rdfPersisterBeans.get(beanName);
-			
-			AbstractRdfPersister successorPersister = (AbstractRdfPersister) AppContextManager.getAppContext()
-					.getBean(successor);
-			persister.setSuccessor(successorPersister);		
-			if(!first){
-				first = true;
-				firstPersister = persister;
+			AbstractRdfPersister persister = (AbstractRdfPersister) AppContextManager
+					.getAppContext().getBean(beanName);
+			status = persister.persistRdf(url, rdfStore);
+			logger.info("status : " + status);
+			// if the status is true, that means the url content
+			// is persisted as rdf, no need to process further
+			if (status) {
+				break;
 			}
 		}
-		//invoke the chain of responsibility with the first handler
-		if(firstPersister != null){
-			firstPersister.persistRdf(url, rdfStore);
-		}
 		return status;
-		
 	}
 
 }

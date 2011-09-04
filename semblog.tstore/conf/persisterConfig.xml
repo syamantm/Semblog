@@ -7,7 +7,7 @@ CoffeeType -> Caffuccino; Min Price -> makeCoffeeServiceBinding03
 	 -->
 <n1:rdfPersister xsi:schemaLocation="http://jaxb.semblog.sw.ecs.soton.uk.ac/rdfPersister.xsd" xmlns:n1="http://jaxb.semblog.sw.ecs.soton.uk.ac/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<rdfPersister>
-		<rdfPersisterBean>drupalRdfPersister</rdfPersisterBean>			
+		<rdfPersisterBean>drupalRdfPersister</rdfPersisterBean>		
 	</rdfPersister>
 	
 	<rdfPersister>

@@ -41,4 +41,7 @@ public class SemblogConstants {
 	public static final String PAGERANK_OUTPUT_FILE_NAME = PAGERANK_DIRECTORY + "/pageRankOutput";
 	
 	public static final String NO_AUTHOR = "anonymous";
+	
+	public static final String NEW_BAYES_FILE_PREFIX = "post";
+	public static final String NEW_BAYES_FILE_SUFFIX = "txt";
 }

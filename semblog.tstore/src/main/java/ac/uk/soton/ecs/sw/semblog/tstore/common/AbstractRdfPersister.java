@@ -3,6 +3,8 @@ package ac.uk.soton.ecs.sw.semblog.tstore.common;
 import java.util.UUID;
 
 import ac.uk.soton.ecs.sw.semblog.tstore.api.IRdfStore;
+import ac.uk.soton.ecs.sw.semblog.tstore.classifier.BayesSpamDetector;
+import ac.uk.soton.ecs.sw.semblog.tstore.classifier.ISpamDetector;
 import ac.uk.soton.ecs.sw.semblog.tstore.vocabulary.SEMBLOG;
 
 import com.hp.hpl.jena.datatypes.xsd.impl.XSDDateType;
@@ -23,18 +25,14 @@ import com.hp.hpl.jena.rdf.model.impl.StatementImpl;
  * @author syamantak
  *
  */
-public abstract class AbstractRdfPersister {
+public abstract class AbstractRdfPersister {	
 	
-	private AbstractRdfPersister successor;
+	
+	private ISpamDetector spamDetector;
 
-	public final void persistRdf(String url, IRdfStore rdfStore) {
-		boolean handledByThisNode = this.persistRdfImpl(url, rdfStore);
-		if (successor != null && !handledByThisNode) {
-			successor.persistRdf(url, rdfStore);
-		}
-	}
+	
 
-	public abstract boolean persistRdfImpl(String url, IRdfStore rdfStore);
+	public abstract boolean persistRdf(String url, IRdfStore rdfStore);
 
 	public void addNodeUUID(String url, Model linkedDataModel) {
 		Resource subject = new ResourceImpl(url);
@@ -46,13 +44,12 @@ public abstract class AbstractRdfPersister {
 		Statement statement = new StatementImpl(subject, predicate, object);
 		linkedDataModel.add(statement);
 	}
+	
 
-	public AbstractRdfPersister getSuccessor() {
-		return successor;
+	protected boolean isSpamPost(String content){
+		if(spamDetector == null){
+			spamDetector = new BayesSpamDetector();
+		}
+		return spamDetector.isSpamPost(content);
 	}
-
-	public void setSuccessor(AbstractRdfPersister successor) {
-		this.successor = successor;
-	}
-
 }

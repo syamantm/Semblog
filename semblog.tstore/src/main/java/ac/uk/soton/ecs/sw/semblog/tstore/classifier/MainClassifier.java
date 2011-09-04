@@ -27,12 +27,13 @@ public class MainClassifier {
 		}
 	}
 
-	public boolean runJob() {		
-		boolean status = prepareData.generateData();
+	public boolean runJob() {
+		// boolean status = prepareData.generateData();
+		boolean status = true;
 		if (status) {
 			status = spamTrainer.trainSpam();
 			if (status) {
-				status = spamDetector.detectSpam();
+				status = spamDetector.testSpamDetection();				
 			}
 		}
 		return status;

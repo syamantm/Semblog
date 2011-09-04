@@ -1,0 +1,102 @@
+<html>
+<head><title>Semblog Extention Options</title></head>
+<style>
+.rankOptions{
+display: tabke;
+}
+#saveStatus{
+color: #33FF33;
+}
+</style>
+<script type="text/javascript">
+
+// Saves options to localStorage.
+function save_options() {
+  var pageRankTxt = document.getElementById("pageRankTxt");
+  localStorage["pageRankWeight"] = pageRankTxt.value;
+
+  var datekTxt = document.getElementById("datekTxt");
+  localStorage["dateWeight"] = datekTxt.value;
+
+  var tagTxt = document.getElementById("tagTxt");
+  localStorage["tagWeight"] = tagTxt.value;
+
+  var linkTxt = document.getElementById("linkTxt");
+  localStorage["linkWeight"] = linkTxt.value;
+  
+  var defaultRankChk = document.getElementById("defaultRankChk");
+  if(defaultRankChk.value == "true"){
+  	localStorage["defaultRankOption"] = true;
+  }else{
+	localStorage["defaultRankOption"] = false;
+  }
+
+ var saveStatus = document.getElementById("saveStatus");
+  saveStatus.html = "Preferences saved!";	
+}
+
+// Restores select box state to saved value from localStorage.
+function restore_options() {
+  var pageRankW = localStorage["pageRankWeight"];
+ var dateW = localStorage["dateWeight"];
+ var tagW = localStorage["tagWeight"];
+ var linkW = localStorage["linkWeight"];
+
+  if (!pageRankW) {
+    pageRankW = 0.25;
+  }
+  if (!dateW) {
+    dateW = 0.25;
+  }
+  if (!tagW) {
+    tagW = 0.25;
+  }
+  if (!linkW) {
+    linkW = 0.25;
+  }
+  var pageRankTxt = document.getElementById("pageRankTxt");
+  pageRankTxt.value = pageRankW;
+
+  var datekTxt = document.getElementById("datekTxt");
+  datekTxt.value = dateW;
+
+  var tagTxt = document.getElementById("tagTxt");
+  tagTxt.value = tagW;
+
+  var linkTxt = document.getElementById("linkTxt");
+  linkTxt.value = linkW;
+  
+}
+
+</script>
+
+<body onload="restore_options()">
+<h2>Semblog Extention Options</h2>
+<p>
+Below list indicates different factors and corresponding Weight used for ranking results. You can customize Weight according to your preferance. To use default ranking Weight check the "Use default Ranking Weight" checkbox.
+</p>
+<p><b>Note: The sum of Weight should not exceed the numeric value "1".</b>
+</p>
+
+<div id="rankPptions">
+<form>
+<fieldset>
+<legend>Customize Ranking Factors</legend>
+<label  for="saveStatus" id="saveStatus"></label>
+<table>
+<tr><td>By PageRank : </td><td><input type="text" id="pageRankTxt" size="10"/></td></tr>
+<tr><td>By Date  : </td><td><input type="text" id="datekTxt" size="10"/></td></tr>
+<tr><td>By Tag Similarity : </td><td><input type="text" id="tagTxt" size="10"/></td></tr>
+<tr><td>By Link Type : </td><td><input type="text" id="linkTxt" size="10"/></td></tr>
+</table>
+<br>
+<input type="checkbox" name="defaultRankChk" value="true" /> Use default Ranking Weight<br />
+</fieldset>
+</form>
+
+<br>
+<button onclick="save_options()">Save</button>
+</div>
+</body>
+</html>
+

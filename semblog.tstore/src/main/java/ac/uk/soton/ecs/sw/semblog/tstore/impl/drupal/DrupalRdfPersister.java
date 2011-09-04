@@ -48,11 +48,11 @@ public class DrupalRdfPersister extends AbstractRdfPersister {
 
 	@Autowired
 	private IIndexCreator idxCreator;
-	
+
 	@Autowired
 	private IRdfRetriever rdfRetriever;
 
-	public boolean persistRdfImpl(String url, IRdfStore rdfStore) {
+	public boolean persistRdf(String url, IRdfStore rdfStore) {
 		logger.info("Persisting : " + url);
 		boolean status = true;
 		DBConnection connection = null;
@@ -69,44 +69,45 @@ public class DrupalRdfPersister extends AbstractRdfPersister {
 
 			FileManager fManager = FileManager.get();
 			fManager.addLocatorURL();
-			
+
 			linkedDataModel = fManager.loadModel(url);
 
-			// harvest links from the blog content
-			// and store them in in the model as rdf triples
-			harvestLinksFromContent(url, linkedDataModel);
+			String content = getContent(url, linkedDataModel);
+			if (!isSpamPost(content)) {
+				// if the post is detected as spam then skip processing
 
-			// harvest tags from the blog and index them
-			harvestTags(url, linkedDataModel);
-			if(!rdfRetriever.isResourceExists(new PageLink(url))){
-				addNodeUUID(url, linkedDataModel);
+				// harvest links from the blog content
+				// and store them in in the model as rdf triples
+				harvestLinksFromContent(content, url, linkedDataModel);
+
+				// harvest tags from the blog and index them
+				harvestTags(url, linkedDataModel);
+				if (!rdfRetriever.isResourceExists(new PageLink(url))) {
+					addNodeUUID(url, linkedDataModel);
+				}
+
+				model.add(linkedDataModel);
+				logger.info("Data added to model");
+				model.commit();
 			}
-
-			model.add(linkedDataModel);
-			logger.info("Data added to model");
-			model.commit();
 			connection.close();
 			if (!model.isClosed()) {
 				model.close();
 			}
 			if (!linkedDataModel.isClosed()) {
 				linkedDataModel.close();
-			}		
+			}
 			connection.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			
-			status = false;
-			logger.info("status = false");
-		}
-		logger.info("Return status = false");
+			status = false;			
+		}		
 		return status;
 
 	}
 
-	private void harvestLinksFromContent(String url, Model linkedDataModel) {
-		logger.info("----- Reading Content Begin ----- ");
-		// get the content from rdf
+	private String getContent(String url, Model linkedDataModel) {
+		String content = null;
 		Property propContent = new PropertyImpl(
 				"http://purl.org/rss/1.0/modules/content/", "encoded");
 		NodeIterator iterator = linkedDataModel
@@ -116,20 +117,22 @@ public class DrupalRdfPersister extends AbstractRdfPersister {
 			// get the content as literal
 			RDFNode node = iterator.next();
 			if (node.isLiteral()) {
-				String content = ((Literal) node).getLexicalForm();
-				// extracts links from the content.
-				// create rdf triples for the links
-				// add them to the model
-				if (linkParser.parseContent(content)) {
-					List<ILink> links = linkParser.getReferencedLinks();
-					Resource subject = new ResourceImpl(url);
-					List<Statement> statements = stmtConverter.convertLinks(subject,
-							links);
-					linkedDataModel.add(statements);
-				}
+				content = ((Literal) node).getLexicalForm();
 			}
 		}
 		logger.info("----- Reading Content End ----- ");
+		return content;
+	}
+
+	private void harvestLinksFromContent(String content, String url,
+			Model linkedDataModel) {
+		if (linkParser.parseContent(content)) {
+			List<ILink> links = linkParser.getReferencedLinks();
+			Resource subject = new ResourceImpl(url);
+			List<Statement> statements = stmtConverter.convertLinks(subject,
+					links);
+			linkedDataModel.add(statements);
+		}
 	}
 
 	private void harvestTags(String url, Model linkedDataModel) {
@@ -197,7 +200,5 @@ public class DrupalRdfPersister extends AbstractRdfPersister {
 		logger.info("----- Index blog End ----- ");
 
 	}
-	
-	
 
 }

@@ -41,7 +41,7 @@ public class RdfStoreTest {
 	 * for(String url : rdfUrls){ persister.persistRdf(url, store); } boolean
 	 * status = testJenaRdfStoreManagerQuery(store); assertTrue(status); }
 	 */
-	
+	/*
 	@Test
 	public void test3_fullWorkflow() {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
@@ -51,7 +51,7 @@ public class RdfStoreTest {
 				.getBean("jenaRdfStoreManager");		
 		boolean status = storeMgr.run();
 		assertTrue(status);
-	}
+	}*/
 
 	@Test
 	public void test4_query() {
@@ -134,8 +134,8 @@ public class RdfStoreTest {
 			System.out.println("Model opened db connection : "
 					+ store.getModelName());
 			// Potentially expensive query.
-			String sparqlQueryString = "SELECT   ?o WHERE { <" + url + "> <http://rdfs.org/sioc/ns#links_to> ?o }";
-			// String sparqlQueryString = "SELECT ?s ?o WHERE { ?s ?p ?o }";
+			//String sparqlQueryString = "SELECT   ?o WHERE { <" + url + "> <http://rdfs.org/sioc/ns#links_to> ?o }";
+			 String sparqlQueryString = "SELECT ?s ?o WHERE { ?s <http://purl.org/dc/terms/creator> ?o }";
 			// See http://www.openjena.org/ARQ/app_api.html
 
 			System.out.println("Creating query");

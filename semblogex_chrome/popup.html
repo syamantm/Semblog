@@ -1,0 +1,327 @@
+<html>
+    <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+ 	<link type="text/css" href="css/sunny/jquery-ui-1.8.14.custom.css" rel="stylesheet" />
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/setup.js"></script>
+        <style>
+              body {
+                font-size: 0.8em;
+            }
+            
+            #wrapper {
+            	width: 500px;
+            }
+
+		span.stars, span.stars span {
+			display: block;
+			background: url(stars.png) 0 -16px repeat-x;
+			width: 80px;
+			height: 16px;
+		}
+	
+		span.stars span {
+			background-position: 0 0;
+		}
+
+        </style>
+
+<script type="text/javascript">   		
+
+		$.fn.stars = function() {
+			return $(this).each(function() {
+				$(this).html($('<span />').width(Math.max(0, (Math.min(10, parseFloat($(this).html())))) * 16));
+			});
+		}
+	</script>
+
+<!--	<script src="http://code.jquery.com/jquery-latest.js"></script> -->
+        <script>
+
+
+
+		var pageUrl;
+		var similarPostsLoaded = false;
+ 		var pageRankW ;
+ 		var dateW ;
+ 		var tagW ;
+ 		var linkW;
+		var useDefaultRankOption;
+		
+            // This callback function is called when the content script has been 
+            // injected and returned its results	    
+            function onPageInfo(o) 
+            { 
+		useDefaultRankOption = localStorage["defaultRankOption"]
+                pageRankW = localStorage["pageRankWeight"];
+		dateW = localStorage["dateWeight"];
+		tagW = localStorage["tagWeight"];
+		linkW = localStorage["linkWeight"];
+		pageUrl = o;
+		if(useDefaultRankOption == true){
+			$.ajax({
+		          type: "POST",
+		          url: "http://localhost:8080/semblogsvc/relatedPosts/rest/",
+			  contentType : "text/html",
+			  data : o.url,                  
+		          dataType: "json",
+		          success: function(response) {					
+		              renderRelatedResult(response);
+		          },
+		          failure: function(errMsg) {
+		                $('#errorMessage').text(errMsg); //errorMessage is id of the div
+		          }
+		    	});
+
+		}else{
+			//check if the Weights are null
+			// and set them to default if need be
+			 if (!pageRankW) {
+			    pageRankW = 0.25;
+			  }
+			  if (!dateW) {
+			    dateW = 0.25;
+			  }
+			  if (!tagW) {
+			    tagW = 0.25;
+			  }
+			  if (!linkW) {
+			    linkW = 0.25;
+			  }
+			$.ajax({
+		          type: "POST",
+		          url: "http://localhost:8080/semblogsvc/relatedPosts/rankOptions/",
+			  contentType : "application/x-www-form-urlencoded",
+			  data : 
+				{ "searchUrl": o.url, 
+				  "pageRankWeight": pageRankW,
+				  "dateWeight": dateW,
+				  "tagWeight": tagW,
+				  "linkWeight": linkW
+			        },
+		          dataType: "json",
+		          success: function(response) {					
+		              renderRelatedResult(response);
+		          },
+		          failure: function(errMsg) {
+		                $('#errorMessage').text(errMsg); //errorMessage is id of the div
+		          }
+		    	});
+		}	
+            } 
+
+	    function renderRelatedResult(result) {
+                  var dtData = [];
+                  var i = 0;
+		  if(result.length > 0) {
+			  $('#relatedPostsContent').append("<h3> Related Blog Posts </h3>");
+			  
+		          $.each(result, function() {
+				count = i+1;
+				$('#relatedPostsContent').append("<hr><div id=\"Related Post no. " + count + "\">" );
+				$('#relatedPostsContent').append("<h3><a href=\"" + result[i].relatedUri + "\" target=\"_new\">" + result[i].title +"</a></h3>");
+				$('#relatedPostsContent').append("Title of this posts is : <b>" + result[i].title + "</b><br>");	
+				$('#relatedPostsContent').append("Author of this posts is : <b>" + result[i].author + "</b><br>");				
+				$('#relatedPostsContent').append("Url of this posts is :");
+				$('#relatedPostsContent').append("<br> <a href=\"" + result[i].relatedUri + "\" target=\"_new\">" 
+					+ result[i].relatedUri +"</a>");
+				$('#relatedPostsContent').append("<br> Score : "+result[i].score );
+				$('#relatedPostsContent').append("<br> <span class=\"stars\">"+(result[i].score*10)+"</span></div><hr><br>" );
+						
+				
+		                i++;
+		          });
+			  $('span.stars').stars();
+		  }else{
+			$('#relatedPostsContent').append("<h3> No Related Post Found </h3>");
+		  }
+            }	    
+
+
+            // Call the getPageInfo function in the background page, passing in 
+            // our onPageInfo function as the callback
+            window.onload = function() 
+            { 
+                var bg = chrome.extension.getBackgroundPage();
+                bg.getPageInfo(onPageInfo);	
+		
+            }
+
+
+	function retrieveSimilarPosts(){		
+		if(similarPostsLoaded == false){
+			useDefaultRankOption = localStorage["defaultRankOption"]
+		        pageRankW = localStorage["pageRankWeight"];
+			dateW = localStorage["dateWeight"];
+			tagW = localStorage["tagWeight"];
+			linkW = localStorage["linkWeight"];
+			if(useDefaultRankOption == true){
+				$.ajax({
+				  type: "POST",
+				  url: "http://localhost:8080/semblogsvc/similarPosts/rest/",
+				  contentType : "text/html",
+				  data : pageUrl.url,                  
+				  dataType: "json",
+				  success: function(response) {			
+				
+				        renderSimilarResults(response);
+				  },
+				  failure: function(errMsg) {
+					$('#similarPostsContent').append("<h3> error </h3>" + errMsg );                        
+				  }
+			    	});
+			}else{
+				$.ajax({
+				  type: "POST",
+				  url: "http://localhost:8080/semblogsvc/similarPosts/rankOptions/",
+				  contentType : "application/x-www-form-urlencoded",
+				  data : { "searchUrl": pageUrl.url, 
+					   "pageRankWeight": pageRankW,
+					   "dateWeight": dateW,
+					   "tagWeight": tagW,
+					   "linkWeight": linkW
+					  },                  
+				  dataType: "json",
+				  success: function(response) {			
+				
+				        renderSimilarResults(response);
+				  },
+				  failure: function(errMsg) {
+					$('#similarPostsContent').append("<h3> error </h3>" + errMsg );                        
+				  }
+			    	});
+			}
+		}
+	}
+
+ 	function renderSimilarResults(result) {
+		similarPostsLoaded = true;
+		var dtData = [];
+		var i = 0;
+		if(result.length > 0) {
+			$('#similarPostsContent').append("<h3> Similar Blog Posts </h3>");
+
+			$.each(result, function() {
+				count = i+1;
+				$('#similarPostsContent').append("<hr><div id=\"Related Post no. " + count + "\">" );
+				$('#similarPostsContent').append("<h3><a href=\"" + result[i].relatedUri + "\" target=\"_new\">" + result[i].title +"</a></h3>");
+				$('#similarPostsContent').append("Title of this posts is : <b>" + result[i].title + "</b><br>");	
+				$('#similarPostsContent').append("Author of this posts is : <b>" + result[i].author + "</b><br>");			
+				$('#similarPostsContent').append("Url of this posts is :");
+				$('#similarPostsContent').append("<br> <a href=\"" + result[i].relatedUri + "\" target=\"_new\">" 			
+				+ result[i].relatedUri +"</a>");
+				$('#similarPostsContent').append("<br> Score : "+result[i].score );
+				$('#similarPostsContent').append("<br> <span class=\"stars\">"+(result[i].score*10)+"</span></div><hr><br>" );
+				i++;
+			});
+			$('span.stars').stars();
+
+		}else{
+			$('#similarPostsContent').append("<h3> No Related Post Found </h3>");
+		}
+            }
+
+
+function retrieveSimilarAuthorPosts(){		
+		if(similarPostsLoaded == false){
+			useDefaultRankOption = localStorage["defaultRankOption"]
+		        pageRankW = localStorage["pageRankWeight"];
+			dateW = localStorage["dateWeight"];
+			tagW = localStorage["tagWeight"];
+			linkW = localStorage["linkWeight"];
+			if(useDefaultRankOption == true){
+				$.ajax({
+				  type: "POST",
+				  url: "http://localhost:8080/semblogsvc/similarAuthors/rest/",
+				  contentType : "text/html",
+				  data : pageUrl.url,                  
+				  dataType: "json",
+				  success: function(response) {			
+				
+				        renderSimilarAuthorResults(response);
+				  },
+				  failure: function(errMsg) {
+					$('#otherPosts').append("<h3> error </h3>" + errMsg );                        
+				  }
+			    	});
+			}else{
+				$.ajax({
+				  type: "POST",
+				  url: "http://localhost:8080/semblogsvc/similarAuthors/rankOptions/",
+				  contentType : "application/x-www-form-urlencoded",
+				  data : { "searchUrl": pageUrl.url, 
+
+					   "pageRankWeight": pageRankW,
+					   "dateWeight": dateW,
+					   "tagWeight": tagW,
+					   "linkWeight": linkW
+					  },                  
+				  dataType: "json",
+				  success: function(response) {			
+				
+				        renderSimilarAuthorResults(response);
+				  },
+				  failure: function(errMsg) {
+					$('#otherPosts').append("<h3> error </h3>" + errMsg );                        
+				  }
+			    	});
+			}
+		}
+	}
+
+ 	function renderSimilarAuthorResults(result) {
+		similarPostsLoaded = true;
+		var dtData = [];
+		var i = 0;
+		if(result.length > 0) {
+			$('#otherPosts').append("<h3> Blog Posts from Same Authors </h3>");
+
+			$.each(result, function() {
+				count = i+1;
+				$('#otherPosts').append("<hr><div id=\"Related Post no. " + count + "\">" );
+				$('#otherPosts').append("<h3><a href=\"" + result[i].relatedUri + "\" target=\"_new\">" + result[i].title +"</a></h3>");
+				$('#otherPosts').append("Title of this posts is : <b>" + result[i].title + "</b><br>");	
+				$('#otherPosts').append("Author of this posts is : <b>" + result[i].author + "</b><br>");			
+				$('#otherPosts').append("Url of this posts is :");
+				$('#otherPosts').append("<br> <a href=\"" + result[i].relatedUri + "\" target=\"_new\">" 			
+				+ result[i].relatedUri +"</a>");
+				$('#otherPosts').append("<br> Score : "+result[i].score );
+				$('#otherPosts').append("<br> <span class=\"stars\">"+(result[i].score*10)+"</span></div><hr><br>" );
+				i++;
+			});
+			$('span.stars').stars();
+
+		}else{
+			$('#otherPosts').append("<h3> No Related Post Found </h3>");
+		}
+            }
+	
+		
+     </script>
+
+    </head>
+    <body> 
+	<div id="wrapper">  
+		<div id="tabs">
+			 <ul>
+				<li><a href="#relatedPosts">Related Posts</a></li>
+				<li><a href="#similarPosts">Similar Posts</a></li>
+				<li><a href="#otherPosts">Other Posts</a></li>		        
+			 </ul>
+		   
+			<div id="relatedPosts">
+				<p><div id="relatedPostsContent"></div></p>
+			</div>	
+			
+			<div id="similarPosts">
+				<p><div id="similarPostsContent"></div></p>
+			</div>	
+
+			<div id="otherPosts">
+				<p><div id="otherPostsContent"></div></p>
+			</div>	
+		</div> 
+	</div>
+    </body>
+</html>

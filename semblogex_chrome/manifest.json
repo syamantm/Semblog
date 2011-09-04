@@ -1,0 +1,21 @@
+{
+    "name": "Semblog Extention 1.0",
+    "description": "Adds Semblog extention to show related blog posts.",
+    "version": "1.0",
+    "background_page": "background.html",
+    "permissions": [
+        "tabs", 
+        "http://*/*", 
+        "https://*/*"
+    ],
+    "browser_action": {
+        "default_title": "Semblog Extention",
+        "default_icon": "RDFicon.png",
+        "popup": "popup.html"
+    },
+    "content_scripts": [ {
+	"matches": ["http://*/*", "https://*/*"], 
+	"js": ["content_script.js"]
+    }],
+   "options_page": "options.html"
+}
