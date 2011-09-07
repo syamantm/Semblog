@@ -20,6 +20,8 @@ public class KMeansClusterCreator implements IClusterCreator {
 
 	private static final Logger logger = Logger
 			.getLogger(KMeansClusterCreator.class);
+	
+	private static final int NUM_CLUSTERS = 2;
 
 	@Override
 	public boolean createClusters() {
@@ -55,7 +57,7 @@ public class KMeansClusterCreator implements IClusterCreator {
 		Path output = new Path(SemblogConstants.KMEANS_OUTPUT_DIRECTORY_PATH);
 		Configuration conf = new Configuration();
 
-		int numClusters = 3;
+		int numClusters = NUM_CLUSTERS;
 		runSequentialKMeansClusterer(conf, input, output, measure, numClusters);
 	}
 
@@ -105,8 +107,8 @@ public class KMeansClusterCreator implements IClusterCreator {
 			throws IOException, InterruptedException, ClassNotFoundException {
 		logger.info("KMeans - creating clusters");
 		Path clusters = RandomSeedGenerator.buildRandom(conf, input, new Path(
-				output, "clusters-0"), 3, measure);
-		double distanceThreshold = 0.4;
+				output, "clusters-0"), NUM_CLUSTERS, measure);
+		double distanceThreshold = 0.54;
 		KMeansDriver.run(input, clusters, output, measure, distanceThreshold,
 				maxIterations, true, true);
 

@@ -22,7 +22,7 @@ public class SemblogConstants {
 	public static final String HOT_FOLDER_PATH = "/home/syamantak/Work/java/semblog/hot";
 	public static final String COLD_FOLDER_PATH = "/home/syamantak/Work/java/semblog/cold";
 	public static final String ERR_FOLDER_PATH = "/home/syamantak/Work/java/semblog/error";
-	public static final double ACCEPTABLE_DISTANCE = 2.5d;
+	public static final double ACCEPTABLE_DISTANCE = 4.5d;
 
 	public static final String CLASSIFIER_TYPE = "bayes";
 	

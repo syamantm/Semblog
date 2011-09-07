@@ -11,9 +11,8 @@ $(document).ready(function(){
 	});
 	
 	// Tabs
-	$("#tabs").tabs({
-		collapsible: true,
-		show:  function(event, ui) {  
+	$("#tabs").tabs({		
+		select:  function(event, ui) {  
 			// Objects available in the function context:
 	    		//ui.tab    - anchor element of the selected (clicked) tab
 	    		//ui.panel   - element, that contains the selected/clicked tab contents
